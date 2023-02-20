@@ -1,0 +1,22 @@
+parameters:
+  stage_name: ""
+
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{parameters.stage_name}}
+    dependsOn: []
+    jobs:
+      - job: installation_script_check
+        steps:
+          - script: |
+              ls
+              chmod 777 ../scripts/install_scripts.sh
+              ../scripts/install_scripts.sh ../scripts
+              instScript=$(../scripts/install_scripts.sh ../scripts  | grep "instScript" | cut -d'=' -f 2)
+              echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
+              echo "Release has Installation Script changes: $instScript"
+            name: scripts
