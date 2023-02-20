@@ -15,9 +15,9 @@ stages:
         steps:
           - script: |
               ls
-              chmod 777 ${parameters.script_path}
-              ${parameters.script_path} ../scripts
-              instScript=$(${parameters.script_path} ../scripts  | grep "instScript" | cut -d'=' -f 2)
+              chmod 777 ${{parameters.script_path}}
+              ${{parameters.script_path}} ../scripts
+              instScript=$(${{parameters.script_path}} ../scripts  | grep "instScript" | cut -d'=' -f 2)
               echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               echo "Release has Installation Script changes: $instScript"
             name: scripts
