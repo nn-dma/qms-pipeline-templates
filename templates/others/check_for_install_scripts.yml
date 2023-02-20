@@ -1,5 +1,6 @@
 parameters:
   stage_name: ""
+  template_repo: ""
   script_path: ""
 
 # Description:
@@ -13,6 +14,7 @@ stages:
     jobs:
       - job: installation_script_check
         steps:
+          - checkout: ${{parameters.template_repo}}
           - script: |
               ls
               chmod 777 ${{parameters.script_path}}
