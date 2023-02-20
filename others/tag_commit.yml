@@ -1,0 +1,29 @@
+parameters:
+  - name: stage_name
+    type: string
+  - name: repository
+    type: string
+  - name: build_tag
+    type: string
+  - name: dependsOn
+    type: object
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name}}
+    dependsOn: ${{ parameters.dependsOn }}
+    jobs:
+      - job: Build_Number_Tag
+        steps:
+          - checkout: none
+          - script: |
+              echo $(System.AccessToken)
+              git config --global user.name "Pipeline"
+              git config --global user.email "pipeline@novonordisk.com"
+              git tag -a "${{ parameters.build_tag}}" HEAD -m "ci: Started deployment "
+              git push https://$(System.AccessToken)@novonordiskit.visualstudio.com/Data%20Management%20and%20Analytics/_git/${{ parameters.repository}}/ --tags
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
