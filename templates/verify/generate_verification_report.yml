@@ -42,8 +42,8 @@ stages:
         workspace:
           clean: all
         steps:
-          - checkout: ${{ parameters.template_repo }}
           - checkout: self
+          - checkout: ${{ parameters.template_repo }}
 
           - download: current
             artifact: pv-json
@@ -56,6 +56,8 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
+              ls -la
+              tree
               echo "local branches:"
               git branch
               echo "remote branches:"
