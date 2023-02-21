@@ -36,7 +36,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
-    condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     jobs:
       - job: generate_verification_report
         workspace:
