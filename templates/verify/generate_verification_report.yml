@@ -42,6 +42,30 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
+              echo "feature_files_path:"
+              echo ${{ parameters.feature_files_path }}
+              echo "system_design_path:"
+              echo ${{ parameters.system_design_path }}
+              echo "system_configuration_path:"
+              echo ${{ parameters.system_configuration_path }}
+              echo "verification_report_template_location:"
+              echo ${{ parameters.verification_report_template_location }}
+              echo "render_configuration_specifications_py_location:"
+              echo ${{ parameters.render_configuration_specifications_py_location }}
+              echo "render_design_specifications_py_location:"
+              echo ${{ parameters.render_design_specifications_py_location }}
+              echo "render_json_test_result_py_location:"
+              echo ${{ parameters.render_json_test_result_py_location }}
+              echo "render_replace_py_location:"
+              echo ${{ parameters.render_replace_py_location }}
+              echo "render_requirements_py_location:"
+              echo ${{ parameters.render_requirements_py_location }}
+              echo "get_pull_request_id_py_location:"
+              echo ${{ parameters.get_pull_request_id_py_location }}
+
+              echo "current directory:"
+              pwd
+
               ls -la
               echo "template_repo:"
               echo ${{ parameters.template_repo }}
@@ -79,7 +103,7 @@ stages:
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               COMMIT_HASH: $(Build.SourceVersion)
-            workingDirectory: $(Build.Repository.Name)
+            workingDirectory: qms-pipeline-templates
             displayName: Generate verification report as HTML
 
           - publish: qms-pipeline-templates/${{ parameters.verification_report_template_location }}
