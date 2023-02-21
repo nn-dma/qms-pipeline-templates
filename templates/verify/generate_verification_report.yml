@@ -43,6 +43,7 @@ stages:
           clean: all
         steps:
           - checkout: ${{ parameters.template_repo }}
+          - checkout: self
 
           - download: current
             artifact: pv-json
