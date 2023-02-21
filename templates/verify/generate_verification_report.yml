@@ -1,34 +1,20 @@
 parameters:
-  - name: stage_name
-    type: string
-  - name: environment_name
-    type: string
-  - name: it_solution_name
-    type: string
-  - name: feature_files_path
-    type: string
-  - name: system_design_path
-    type: string
-  - name: system_configuration_path
-    type: string
-  - name: template_repo
-    type: string
-  - name: verification_report_template_location
-    type: string
-  - name: render_configuration_specifications_py_location
-    type: string
-  - name: render_design_specifications_py_location
-    type: string
-  - name: render_json_test_result_py_location
-    type: string
-  - name: render_replace_py_location
-    type: string
-  - name: render_requirements_py_location
-    type: string
-  - name: get_pull_request_id_py_location
-    type: string
-  - name: ready_for
-    type: string
+  stage_name: ""
+  environment_name: ""
+  it_solution_name: ""
+  feature_files_path: ""
+  system_design_path: ""
+  system_configuration_path: ""
+  template_repo: ""
+  verification_report_template_location: ""
+  render_configuration_specifications_py_location: ""
+  render_design_specifications_py_location: ""
+  render_json_test_result_py_location: ""
+  render_replace_py_location: ""
+  render_requirements_py_location: ""
+  get_pull_request_id_py_location: ""
+  ready_for: ""
+
 # Description:
 
 # Purpose:
@@ -57,7 +43,8 @@ stages:
 
           - script: |
               ls -la
-              tree
+              echo "template_repo:"
+              echo ${{ parameters.template_repo }}
               echo "local branches:"
               git branch
               echo "remote branches:"
@@ -92,9 +79,10 @@ stages:
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               COMMIT_HASH: $(Build.SourceVersion)
+            workingDirectory: ${{ parameters.template_repo }}
             displayName: Generate verification report as HTML
 
-          - publish: ${{ parameters.verification_report_template_location }}
+          - publish: ${{ parameters.template_repo }}/${{ parameters.verification_report_template_location }}
             artifact: verification_report
             displayName: Publish verification report as build artifact
 
