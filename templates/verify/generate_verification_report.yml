@@ -120,7 +120,6 @@ stages:
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               COMMIT_HASH: $(Build.SourceVersion)
-              QMS_PIPELINE_TEMPLATES_FOLDER: qms-pipeline-templates
             displayName: Generate verification report as HTML
 
           - publish: qms-pipeline-templates/${{ parameters.verification_report_template_location }}
