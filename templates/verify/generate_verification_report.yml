@@ -53,6 +53,7 @@ stages:
               echo "render_replace_py_location: ${{ parameters.render_replace_py_location }}"
               echo "render_requirements_py_location: ${{ parameters.render_requirements_py_location }}"
               echo "get_pull_request_id_py_location: ${{ parameters.get_pull_request_id_py_location }}"
+              echo "======================================"
 
               echo "current directory:"
               pwd
