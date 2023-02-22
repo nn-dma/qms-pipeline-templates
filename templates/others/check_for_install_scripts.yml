@@ -1,7 +1,6 @@
 parameters:
   stage_name: ""
   template_repo: ""
-  check_install_script_location: ""
   script_path: ""
 
 # Description:
@@ -12,6 +11,8 @@ parameters:
 stages:
   - stage: ${{parameters.stage_name}}
     dependsOn: []
+    variables:
+      - check_install_script_location: qms-pipeline-templates/templates/scripts/install_scripts.sh
     jobs:
       - job: installation_script_check
         steps:
@@ -20,9 +21,9 @@ stages:
 
           - script: |
               ls
-              chmod 777 ${{parameters.check_install_script_location}}
-              ${{parameters.check_install_script_location}} ${{parameters.script_path}}
-              instScript=$(${{parameters.check_install_script_location}} ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
+              chmod 777 ${{variables.check_install_script_location}}
+              ${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}
+              instScript=$(${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
               echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               echo "Release has Installation Script changes: $instScript"
             name: scripts
