@@ -1,0 +1,39 @@
+parameters:
+  - name: stage_name
+    type: string
+  - name: service_name
+    type: string
+  - name: template_repo
+    type: string
+  - name: feature_files_path
+    type: string
+  - name: system_design_path
+    type: string
+
+# Description:
+
+# The "Check traceability between URS and DS" should be generalised to something like "Integrity check",
+# since it includes more that just traceability.
+#E.g. it verifies that each @URS has a unique ID, scenarios not tagged @Manual or @ReviewByException in fact has step implementations, et cetera.
+
+stages:
+  - stage: ${{ parameters.stage_name }}
+    variables:
+      script_location: qms-pipeline-templates/templates/scripts/check_traceability_between_urs_ds.py
+    jobs:
+      - job: Check_Traceability_between_URS_DS_job
+        # environment: "check_traceability_between_urs_ds"
+        # TODO: Run with poetry
+        steps:
+          - checkout: self
+          - checkout: ${{parameters.template_repo}}
+
+          - script: |
+              curl -sSL https://install.python-poetry.org | python -
+              poetry install
+            displayName: Setup environment
+
+          - script: |
+              set -e
+              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }}
+            displayName: Check traceability between URS and DS
