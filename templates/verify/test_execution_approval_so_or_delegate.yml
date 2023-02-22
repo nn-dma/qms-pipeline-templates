@@ -1,0 +1,23 @@
+parameters:
+  - name: stage_name
+    type: string
+
+  - name: environment
+    type: string
+# Description:
+
+# Purpose:
+
+# Expected output:
+
+stages:
+  - stage: ${{ parameters.stage_name }}
+    condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    jobs:
+      - deployment: test_execution_approval_by_so_or_delegate
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - bash: echo "test execution approval by System Owner or delegate"
