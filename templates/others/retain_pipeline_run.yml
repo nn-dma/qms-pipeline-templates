@@ -8,16 +8,21 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
+    pool:
+      vmImage: ubuntu-latest
+
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     jobs:
       - job: retain_pipeline_run
         steps:
+          - checkout: none
+
           - task: PowerShell@2
             name: RetainReleaseBuildOnSuccess
             displayName: Retain Release Build on Success
             inputs:
               failOnStderr: true
-              targetType: 'inline'
+              targetType: "inline"
               script: |
                 $contentType = "application/json";
                 $headers = @{ Authorization = 'Bearer $(System.AccessToken)' };
