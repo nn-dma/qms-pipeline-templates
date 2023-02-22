@@ -122,7 +122,7 @@ stages:
               COMMIT_HASH: $(Build.SourceVersion)
             displayName: Generate verification report as HTML
 
-          - publish: qms-pipeline-templates/${{ parameters.verification_report_template_location }}
+          - publish: ${{ parameters.verification_report_template_location }}
             artifact: verification_report
             displayName: Publish verification report as build artifact
 
