@@ -1,0 +1,32 @@
+parameters:
+  - name: stage_name
+    type: string
+
+  - name: check_for_install_scripts_stage_name
+    type: string
+
+  - name: environment
+    type: string
+
+  - name: dependsOn
+    type: object
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name }}
+    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_install_scripts_stage_name }}.outputs['check_scripts.scripts.instScript'], 'true'))
+    dependsOn: ${{ parameters.dependsOn }}
+    jobs:
+      - deployment: Execute_Installation_Script
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - bash: echo "Please execute the scripts listed in the previous stage"
+
+
+
