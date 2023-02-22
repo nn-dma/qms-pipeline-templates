@@ -42,6 +42,7 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
+              echo "============= PARAMETERS ============="
               echo "feature_files_path: ${{ parameters.feature_files_path }}"
               echo "system_design_path: ${{ parameters.system_design_path }}"
               echo "system_configuration_path: ${{ parameters.system_configuration_path }}"
@@ -55,6 +56,10 @@ stages:
 
               echo "current directory:"
               pwd
+
+              echo "copying poetry files to root"
+              cp qms-pipeline-templates/pyproject.toml .
+              cp qms-pipeline-templates/poetry.lock .
 
               ls -la
               echo "template_repo:"
