@@ -29,6 +29,8 @@ stages:
           - checkout: ${{parameters.template_repo}}
 
           - script: |
+              cp $(Build.Repository.Name)/poetry.lock .
+              cp $(Build.Repository.Name)/pyproject.toml .
               curl -sSL https://install.python-poetry.org | python -
               poetry install
             displayName: Setup environment
