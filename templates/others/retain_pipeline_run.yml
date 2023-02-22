@@ -1,0 +1,27 @@
+parameters:
+  - name: stage_name
+    type: string
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name }}
+    condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    jobs:
+      - job: retain_pipeline_run
+        steps:
+          - task: PowerShell@2
+            name: RetainReleaseBuildOnSuccess
+            displayName: Retain Release Build on Success
+            inputs:
+              failOnStderr: true
+              targetType: 'inline'
+              script: |
+                $contentType = "application/json";
+                $headers = @{ Authorization = 'Bearer $(System.AccessToken)' };
+                $rawRequest = @{ daysValid = 365 * 10; definitionId = $(System.DefinitionId); ownerId = 'User:$(Build.RequestedForId)'; protectPipeline = $false; runId = $(Build.BuildId) };
+                $request = ConvertTo-Json @($rawRequest);
+                $uri = "$(System.CollectionUri)$(System.TeamProject)/_apis/build/retention/leases?api-version=6.0-preview.1";
+                Invoke-RestMethod -uri $uri -method POST -Headers $headers -ContentType $contentType -Body $request;
