@@ -105,7 +105,7 @@ def get_pull_request(commit_hash, auth_method, access_token, organization, proje
     return response.text
 
 def get_work_items_link(commit_hash, auth_method, access_token, organization, project, repository, work_item):
-    # Replace with the right organization id, project id and repository id
+    # Replace with the right organization id, project id and work item id
     #url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
     url = f"https://dev.azure.com/{organization}/{project}/_apis/wit/workitems/{work_item}?api-version=7.0"
 
@@ -166,6 +166,9 @@ def main(argv):
         project = argv[7]
         repository = argv[9]
         result = argv[11]
+
+        # URL encode the project name
+        project = project.replace(" ", "%20")
 
         # Use environment variable to read the protected access token if we are running in Azure DevOps
         auth_method = 'Basic'
