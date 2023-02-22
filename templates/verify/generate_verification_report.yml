@@ -60,6 +60,7 @@ stages:
               echo "copying poetry files to root"
               cp qms-pipeline-templates/pyproject.toml .
               cp qms-pipeline-templates/poetry.lock .
+              poetry install
 
               ls -la
               echo "template_repo:"
