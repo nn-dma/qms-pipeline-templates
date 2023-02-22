@@ -42,26 +42,16 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
-              echo "feature_files_path:"
-              echo ${{ parameters.feature_files_path }}
-              echo "system_design_path:"
-              echo ${{ parameters.system_design_path }}
-              echo "system_configuration_path:"
-              echo ${{ parameters.system_configuration_path }}
-              echo "verification_report_template_location:"
-              echo ${{ parameters.verification_report_template_location }}
-              echo "render_configuration_specifications_py_location:"
-              echo ${{ parameters.render_configuration_specifications_py_location }}
-              echo "render_design_specifications_py_location:"
-              echo ${{ parameters.render_design_specifications_py_location }}
-              echo "render_json_test_result_py_location:"
-              echo ${{ parameters.render_json_test_result_py_location }}
-              echo "render_replace_py_location:"
-              echo ${{ parameters.render_replace_py_location }}
-              echo "render_requirements_py_location:"
-              echo ${{ parameters.render_requirements_py_location }}
-              echo "get_pull_request_id_py_location:"
-              echo ${{ parameters.get_pull_request_id_py_location }}
+              echo "feature_files_path: ${{ parameters.feature_files_path }}"
+              echo "system_design_path: ${{ parameters.system_design_path }}"
+              echo "system_configuration_path: ${{ parameters.system_configuration_path }}"
+              echo "verification_report_template_location: ${{ parameters.verification_report_template_location }}"
+              echo "render_configuration_specifications_py_location: ${{ parameters.render_configuration_specifications_py_location }}"
+              echo "render_design_specifications_py_location: ${{ parameters.render_design_specifications_py_location }}"
+              echo "render_json_test_result_py_location: ${{ parameters.render_json_test_result_py_location }}"
+              echo "render_replace_py_location: ${{ parameters.render_replace_py_location }}"
+              echo "render_requirements_py_location: ${{ parameters.render_requirements_py_location }}"
+              echo "get_pull_request_id_py_location: ${{ parameters.get_pull_request_id_py_location }}"
 
               echo "current directory:"
               pwd
@@ -74,36 +64,63 @@ stages:
               echo "remote branches:"
               git branch -r
               echo $COMMIT_HASH
+
+              echo "================> Extracting and rendering pull request links"
               prId=$(poetry run python ${{ parameters.get_pull_request_id_py_location }} -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project $(System.TeamProject) -repository $(Build.Repository.Name) -result pull_request_id)
               echo $prId
+              sed -i "s|<var>PULL_REQUEST_LINK</var>|$(System.CollectionUri)$(System.TeamProject)/_git/$(Build.Repository.Name)/pullrequest/$prId|g" ${{ parameters.verification_report_template_location }}
+
+              echo "================> Extracting and rendering pull request closed timestamp"
               prClosedTimestamp=$(poetry run python ${{ parameters.get_pull_request_id_py_location }} -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project $(System.TeamProject) -repository $(Build.Repository.Name) -result pull_request_closed_timestamp)
               echo $prClosedTimestamp
-              echo "---------------------------------"
+              sed -i "s|<var>TIMESTAMP_PIPELINE_START</var>|$prClosedTimestamp|g" ${{ parameters.verification_report_template_location }}
+
+              echo "================> Extracting and rendering related work items"
               poetry run python ${{ parameters.get_pull_request_id_py_location }} -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project $(System.TeamProject) -repository $(Build.Repository.Name) -result work_items > workItemsHtml.html
               cat workItemsHtml.html
-              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/pv-json > testResultsHtml.html
-              poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>WORK_ITEM_LINKS</var>"
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<kbd><var>CHANGE_ITEM</var></kbd>"
+              
+              echo "================> Extracting and rendering test results"
+              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/pv-json > testResultsHtml.html
+              poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
+              
+              echo "================> Extracting and rendering requirements"
               poetry run python ${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} > listOfRequirementsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./listOfRequirementsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_REQUIREMENTS</var>"
+              
+              echo "================> Extracting and rendering design specifications"
               poetry run python ${{ parameters.render_design_specifications_py_location }} -folder ${{ parameters.system_design_path }} > listOfDesignSpecifications.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./listOfDesignSpecifications.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_DESIGN_SPECIFICATIONS</var>"
+              
+              echo "================> Extracting and rendering configuration specifications"
               poetry run python ${{ parameters.render_configuration_specifications_py_location }} -folder ${{ parameters.system_configuration_path }} > listOfConfigurationSpecifications.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./listOfConfigurationSpecifications.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_CONFIGURATION_SPECIFICATIONS</var>"
+              
+              echo "================> Rendering IT solution name"
               sed -i 's|<var>IT_SOLUTION_NAME</var>|${{ parameters.it_solution_name }}|g' ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering pipeline run ID"
               sed -i 's|<var>PIPELINE_RUN_ID</var>|$(Build.BuildId)|g' ${{ parameters.verification_report_template_location }}
-              sed -i "s|<var>TIMESTAMP_PIPELINE_START</var>|$prClosedTimestamp|g" ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering target environment name"
               sed -i 's|<var>ENVIRONMENT</var>|${{ parameters.environment_name }}|g' ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering ADO project name"
               sed -i 's|<var>ADO_PROJECT_NAME</var>|$(System.TeamProject)|g' ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering 'ready for' (production/use) value"
               sed -i 's|<var>IS_READY_FOR</var>|${{ parameters.ready_for }}|g' ${{ parameters.verification_report_template_location }}
-              sed -i "s|<var>PULL_REQUEST_LINK</var>|$(System.CollectionUri)$(System.TeamProject)/_git/$(Build.Repository.Name)/pullrequest/$prId|g" ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering pipeline run link"
               sed -i 's|<var>ADO_PIPELINE_RUN_LINK</var>|$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)\&view=results|g' ${{ parameters.verification_report_template_location }}
+
+              echo "================> Rendering pipeline run artifacts link"
               sed -i 's|<var>ARTIFACTS_ADO_PIPELINE_LINK</var>|$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)\&view=artifacts\&pathAsName=false\&type=publishedArtifacts|g' ${{ parameters.verification_report_template_location }}
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               COMMIT_HASH: $(Build.SourceVersion)
-            workingDirectory: qms-pipeline-templates
+              QMS_PIPELINE_TEMPLATES_FOLDER: qms-pipeline-templates
             displayName: Generate verification report as HTML
 
           - publish: qms-pipeline-templates/${{ parameters.verification_report_template_location }}
