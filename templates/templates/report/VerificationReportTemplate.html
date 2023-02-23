@@ -144,8 +144,15 @@
                     </div>
                     <!-- conclusion results -->
                     <div>
-                        <p>Based on the verification activities performed, it is hereby concluded that <kbd><var>IT_SOLUTION_NAME</var></kbd> release <kbd><var>PIPELINE_RUN_ID</var></kbd> 
-                        is fit for intended use and ready to be released for <var>IS_READY_FOR</var>. </p>
+                        <p><b>It is hereby concluded that <kbd><var>IT_SOLUTION_NAME</var></kbd> release <kbd><var>PIPELINE_RUN_ID</var></kbd> 
+                        is fit for intended use and ready to be released for <var>IS_READY_FOR</var></b>.<p>
+                        <p> The conclusion is based on:
+                        <ul>
+                            <li>All verification activities were succesfully executed and no issues were found.</li>
+                            <li>Regression testing was performed by re-executing all previously defined automated test cases, and all such test cases passed.</li>
+                            <li>Based on all test cases passing (both for regression testing and for verification of current release) and the performed peer review of documentation, test code, and pipeline definition, the performed verification is assessed to be sufficient.</li>
+                            <li>Requirements that only have test cases using verification method “Review by exception” are concluded not to have been verified. All other requirements are concluded to have been verified.</li>
+                        </p>
                     </div>
                 </div>
             </article>
