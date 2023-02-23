@@ -108,7 +108,7 @@
     
                 The report summarises and concludes on the acceptance verification activities performed and has the following sections:
                 <ul>
-                    <li>Conclusion: Concludes on verification activities and whether the IT solution is fit for intended use and ready to be released.</li>
+                    <li>Conclusion: Concludes on verification activities and whether the IT solution is fit for intended use and ready to be released for <var>IS_READY_FOR</var>.</li>
                     <li>Requirements: Lists all requirements in scope for the release.</li>  
                     <li>Design specifications: Lists all design specifications in scope for the release.</li>
                     <li>Configuration specifications: Lists all configuration specifications introduced in this release.</li>
@@ -127,10 +127,10 @@
                         in the <kbd><var>ENVIRONMENT</var></kbd> environment:
                         <ol>
                             <li>Approval of IT change for implementation.</li>
-                            <li>Review and approval of all changes to requirements.</li>
-                            <li>Review and approval of all changes to basis for configuration management including traceability to  requirements.</li>
-                            <li>Review and approval of all test cases for both installation verification and acceptance verification.</li>
-                            <li>Code review of all code written as part of the release, including production code, test code, infrastructure as code, and pipeline code.</li>
+                            <li>Peer review and approval of all changes to requirements.</li>
+                            <li>Peer review and approval of all changes to basis for configuration management including traceability to  requirements.</li>
+                            <li>Peer review and approval of all test cases for both installation verification and acceptance verification.</li>
+                            <li>Peer review of all code written as part of the release, including production code, test code, infrastructure code, and pipeline code.</li>
                             <li>Installation of the IT solution in the <kbd><var>ENVIRONMENT</var></kbd> environment.</li>
                             <li>Acknowledgement that any manual configurations required for the release have been executed.</li>
                             <li>Execution of installation verification test cases, both automatic and manual ones.</li>
@@ -138,12 +138,9 @@
                             <li>Execution of acceptance verification test cases, both automatic and manual ones related to the new release.</li>
                             <li>Generation of this verification report.</li>
                         </ol>
-                        <p>All review and approval activities are documented on the pull request that initiated the release pipeline. 
-                        (see <a href="<var>PULL_REQUEST_LINK</var>" role="button">here</a> for details).</p>
-                        <p>All work items related to PR.
-                        (see <var>WORK_ITEM_LINKS</var> for details).</p>
-                        <p>All acknowledgements of manual configuration and verification are documented on the pipeline run that generated this verification report 
-                        (see <a href="<var>ADO_PIPELINE_RUN_LINK</var>" role="button">here</a> for details).</p>
+                        <p>All peer reviews and corresponding approval activities (steps 2 to 5) are documented on the pull request that initiated the release pipeline (see <a href="<var>PULL_REQUEST_LINK</var>">here</a> for details).</p>
+                        <p>All acknowledgements of manual configuration (step 6) and verification (steps 8 and 10) are documented on the pipeline run that generated this verification report 
+                        (see <a href="<var>ADO_PIPELINE_RUN_LINK</var>">here</a> for details).</p>
                     </div>
                     <!-- conclusion results -->
                     <div>
