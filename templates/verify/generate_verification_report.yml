@@ -42,17 +42,22 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
+              RED='\033[0;31m'    # Red
+              GREEN='\033[0;32m'  # Green
+              PURPLE='\033[0;35m' # Purple
+              NC='\033[0m'        # No Color
+
               echo "============= PARAMETERS ============="
-              echo "feature_files_path: ${{ parameters.feature_files_path }}"
-              echo "system_design_path: ${{ parameters.system_design_path }}"
-              echo "system_configuration_path: ${{ parameters.system_configuration_path }}"
-              echo "verification_report_template_location: ${{ parameters.verification_report_template_location }}"
-              echo "render_configuration_specifications_py_location: ${{ parameters.render_configuration_specifications_py_location }}"
-              echo "render_design_specifications_py_location: ${{ parameters.render_design_specifications_py_location }}"
-              echo "render_json_test_result_py_location: ${{ parameters.render_json_test_result_py_location }}"
-              echo "render_replace_py_location: ${{ parameters.render_replace_py_location }}"
-              echo "render_requirements_py_location: ${{ parameters.render_requirements_py_location }}"
-              echo "get_pull_request_id_py_location: ${{ parameters.get_pull_request_id_py_location }}"
+              echo "${PURPLE}feature_files_path:${NC} ${{ parameters.feature_files_path }}"
+              echo "${PURPLE}system_design_path:${NC} ${{ parameters.system_design_path }}"
+              echo "${PURPLE}system_configuration_path:${NC} ${{ parameters.system_configuration_path }}"
+              echo "${PURPLE}verification_report_template_location:${NC} ${{ parameters.verification_report_template_location }}"
+              echo "${PURPLE}render_configuration_specifications_py_location:${NC} ${{ parameters.render_configuration_specifications_py_location }}"
+              echo "${PURPLE}render_design_specifications_py_location:${NC} ${{ parameters.render_design_specifications_py_location }}"
+              echo "${PURPLE}render_json_test_result_py_location:${NC} ${{ parameters.render_json_test_result_py_location }}"
+              echo "${PURPLE}render_replace_py_location:${NC} ${{ parameters.render_replace_py_location }}"
+              echo "${PURPLE}render_requirements_py_location:${NC} ${{ parameters.render_requirements_py_location }}"
+              echo "${PURPLE}get_pull_request_id_py_location:${NC} ${{ parameters.get_pull_request_id_py_location }}"
               echo "======================================"
 
               echo "current directory:"
