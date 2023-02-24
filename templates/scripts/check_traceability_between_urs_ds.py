@@ -18,7 +18,7 @@ def build_feature_files(feature_files_path):
 def construct_non_generic_tag_list(features):
 
     # Build list of features in feature files
-    allowlist = ["URS", "GxP", "non-GxP", "CA"]
+    allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"]
     taglist = [feature.tags for feature in features]
     non_classification_tags = [
         tag for tags in taglist for tag in tags if tag not in allowlist
