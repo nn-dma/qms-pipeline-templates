@@ -18,7 +18,8 @@ stages:
     jobs:
       - job: Build_Number_Tag
         steps:
-          - checkout: none
+          - checkout: self
+
           - script: |
               echo $(System.AccessToken)
               git config --global user.name "Pipeline"
