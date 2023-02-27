@@ -25,6 +25,7 @@ stages:
               git config --global user.name "Pipeline"
               git config --global user.email "pipeline@novonordisk.com"
               git tag -a "${{ parameters.build_tag}}" HEAD -m "ci: Started deployment "
-              git push https://$(System.AccessToken)@novonordiskit.visualstudio.com/Data%20Management%20and%20Analytics/_git/${{ parameters.repository}}/ --tags
+              ado_project=$(sed 's/ /%20/g' <<<$(System.TeamProject))
+              git push https://$(System.AccessToken)@novonordiskit.visualstudio.com/$(ado_project)/_git/${{ parameters.repository}}/ --tags
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
