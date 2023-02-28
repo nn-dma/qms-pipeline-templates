@@ -1,0 +1,26 @@
+parameters:
+  - name: stage_name
+    type: string
+
+  - name: template_repo
+    type: string
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name }}
+    jobs:
+      - job: link_to_workitem
+        steps:
+          - checkout: template_repo
+
+          - script: |
+
+              poetry run python qms-pipeline-templates/templates/scripts/report/get_pull_request_id.py -commit $(Build.SourceVersion) -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link 
+
+            displayName: Link to work item
+            env:
+              BUILD_ID: $(Build.BuildId)
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
