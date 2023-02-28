@@ -39,10 +39,10 @@ def extract_features(lines):
 
     return features
 
-def extract_current_remote_branch():
-    # git branch remote
-    result = subprocess.run(['git', 'branch', '-r'], stdout=subprocess.PIPE)
-    return result.stdout.decode().strip()
+# def extract_current_remote_branch():
+#     # git branch remote
+#     result = subprocess.run(['git', 'branch', '-r'], stdout=subprocess.PIPE)
+#     return result.stdout.decode().strip()
 
 def extract_last_modified_commit_hash(filepath, branch):
     # git log <remote branch> -n 1 --pretty=format:%H -- <filepath>
