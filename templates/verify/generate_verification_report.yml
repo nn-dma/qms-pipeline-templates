@@ -14,6 +14,7 @@ parameters:
   render_requirements_py_location: ""
   get_pull_request_id_py_location: ""
   ready_for: ""
+# TODO: Set location values with defaults
 
 # Description:
 
