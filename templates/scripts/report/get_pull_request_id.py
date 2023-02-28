@@ -84,18 +84,20 @@ def link_work_item(work_item, auth_method, access_token, organization):
 
     url = f"https://dev.azure.com/{organization}/_apis/wit/workitems/{work_item}?api-version=7.0"
 
-    payload = {
-        "op": "add",
-        "path": "/relations/-",
-        "value": {
-            "rel": "ArtifactLink",
-            "url": f"vstfs:///Build/Build/{os.getenv('BUILD_ID')}",
-            "attributes": {
-                "comment": "Making a new link for the build",
-                "name": "Build",
+    payload = [
+        {
+            "op": "add",
+            "path": "/relations/-",
+            "value": {
+                "rel": "ArtifactLink",
+                "url": f"vstfs:///Build/Build/{os.getenv('BUILD_ID')}",
+                "attributes": {
+                    "comment": "Making a new link for the build",
+                    "name": "Build",
+                },
             },
-        },
-    }
+        }
+    ]
 
     print(payload)
 
