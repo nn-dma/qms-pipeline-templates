@@ -32,15 +32,15 @@ stages:
             fetchDepth: 0
           - checkout: ${{ parameters.template_repo }}
 
-          - download: current
-            artifact: pv-json
-            displayName: Download PV Allure json test results from artifact store
+          # - download: current
+          #   artifact: pv-json
+          #   displayName: Download PV Allure json test results from artifact store
 
-          - script: |
-              rm -rf $(Pipeline.Workspace)/pv-json/html
-              cd $(Pipeline.Workspace)/pv-json
-              ls -l
-            displayName: Remove HTML folder if it exists
+          # - script: |
+          #     rm -rf $(Pipeline.Workspace)/pv-json/html
+          #     cd $(Pipeline.Workspace)/pv-json
+          #     ls -l
+          #   displayName: Remove HTML folder if it exists
 
           - script: |
               RED='\033[0;31m'    # Red
