@@ -46,7 +46,8 @@ def extract_current_remote_branch():
 
 def extract_last_modified_commit_hash(filepath):
     # git log <remote branch> -n 1 --pretty=format:%H -- <filepath>
-    result = subprocess.run(['git', 'log', extract_current_remote_branch(), '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
+    #result = subprocess.run(['git', 'log', extract_current_remote_branch(), '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
+    result = subprocess.run(['git', 'log', 'main', '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
     return result.stdout.decode()
 
 def extract_last_modified_commit_hash_timestamp(commit_hash):
