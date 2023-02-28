@@ -106,7 +106,7 @@ def link_work_item(work_item, auth_method, access_token, organization):
 
     response = requests.request("PATCH", url, headers=headers, data=payload)
 
-    print(response)
+    print(response.text)
 
 # TODO: Add exception handling
 def get_pull_request(
