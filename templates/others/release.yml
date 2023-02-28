@@ -14,7 +14,7 @@ stages:
     jobs:
       - job: link_to_workitem
         steps:
-          - checkout: template_repo
+          - checkout: ${{ parameters.template_repo }}
 
           - script: |
 
