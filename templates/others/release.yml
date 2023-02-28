@@ -18,7 +18,7 @@ stages:
 
           - script: |
 
-              poetry run python qms-pipeline-templates/templates/scripts/report/get_pull_request_id.py -commit $(Build.SourceVersion) -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link 
+              poetry run python templates/scripts/report/get_pull_request_id.py -commit $(Build.SourceVersion) -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link 
 
             displayName: Link to work item
             env:
