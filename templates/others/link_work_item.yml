@@ -11,6 +11,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
+    condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     jobs:
       - job: link_to_workitem
         steps:
