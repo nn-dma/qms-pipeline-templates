@@ -79,68 +79,98 @@ import os
 
 work_item_list = []
 
-# TODO: Add exception handling
-def get_pull_request(commit_hash, auth_method, access_token, organization, project, repository):
-    # Replace with the right organization id, project id and repository id
-    #url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
-    url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repository}/pullrequestquery?api-version=7.0"
 
-    payload = json.dumps({
-        "queries": [
-            {
-            "items": [
-                f"{commit_hash}"
-            ],
-            "type": "lastMergeCommit"
-            }
-        ]
-    })
+def link_work_item(work_item, auth_method, access_token, organization):
+
+    url = f"https://dev.azure.com/{organization}/_apis/wit/workitems/{work_item}?api-version=7.0"
+
+    payload = json.dumps(
+        {
+            "op": "add",
+            "path": "/relations/-",
+            "value": {
+                "rel": "ArtifactLink",
+                "url": f"vstfs:///Build/Build/{os.getenv(BUILD_ID)}",
+                "attributes": {
+                    "comment": "Making a new link for the build",
+                    "name": "Build",
+                },
+            },
+        }
+    )
 
     headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'{auth_method} {access_token}'
+        "Content-Type": "application/json",
+        "Authorization": f"{auth_method} {access_token}",
+    }
+
+    requests.request("PATCH", url, headers=headers, data=payload)
+
+
+# TODO: Add exception handling
+def get_pull_request(
+    commit_hash, auth_method, access_token, organization, project, repository
+):
+    # Replace with the right organization id, project id and repository id
+    # url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
+    url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repository}/pullrequestquery?api-version=7.0"
+
+    payload = json.dumps(
+        {"queries": [{"items": [f"{commit_hash}"], "type": "lastMergeCommit"}]}
+    )
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"{auth_method} {access_token}",
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.text
 
-def get_work_items_link(commit_hash, auth_method, access_token, organization, project, repository, work_item):
+
+def get_work_items_link(
+    commit_hash, auth_method, access_token, organization, project, repository, work_item
+):
     # Replace with the right organization id, project id and work item id
-    #url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
+    # url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
     url = f"https://dev.azure.com/{organization}/{project}/_apis/wit/workitems/{work_item}?api-version=7.0"
 
     headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'{auth_method} {access_token}'
+        "Content-Type": "application/json",
+        "Authorization": f"{auth_method} {access_token}",
     }
 
     response = requests.request("GET", url, headers=headers)
     r = json.loads(response.text, strict=False)
     work_item_list.append(r["_links"]["html"]["href"])
 
+
 # TODO: Add exception handling
 def get_pull_request_id(response, commit_hash):
     r = json.loads(response, strict=False)
-    pull_request = r['results'][0][commit_hash][0]
-    #url = pull_request['url']
-    mergeCommitMessage = pull_request['completionOptions']['mergeCommitMessage']
-    #workItem = re.search("132", mergeCommitMessage).group()
-    pull_request_id = pull_request['pullRequestId']
+    pull_request = r["results"][0][commit_hash][0]
+    # url = pull_request['url']
+    mergeCommitMessage = pull_request["completionOptions"]["mergeCommitMessage"]
+    # workItem = re.search("132", mergeCommitMessage).group()
+    pull_request_id = pull_request["pullRequestId"]
     return pull_request_id
+
 
 def get_work_items(response, commit_hash):
     r = json.loads(response, strict=False)
-    pull_request = r['results'][0][commit_hash][0]
-    mergeCommitMessage = pull_request['completionOptions']['mergeCommitMessage']
+    pull_request = r["results"][0][commit_hash][0]
+    mergeCommitMessage = pull_request["completionOptions"]["mergeCommitMessage"]
     workItems = re.findall(r"#(\d+)", mergeCommitMessage)
     return workItems
+
 
 # TODO: Add exception handling
 def get_pull_request_closed_timestamp(response, commit_hash):
     r = json.loads(response, strict=False)
-    pull_request = r['results'][0][commit_hash][0]
-    pull_request_closed_timestamp = pull_request['closedDate']
+    pull_request = r["results"][0][commit_hash][0]
+    pull_request_closed_timestamp = pull_request["closedDate"]
     return pull_request_closed_timestamp
+
 
 # TODO: Add exception handling
 def main(argv):
@@ -158,7 +188,15 @@ def main(argv):
     #        argv[9] is 'QMS-TEMPLATE'
     #        argv[10] is '-result'
     #        argv[11] is 'pull_request_id' OR 'pull_request_closed_timestamp'
-    if len(argv) == 12 and argv[0] == '-commit' and argv[2] == '-accesstoken' and argv[4] == '-organization' and argv[6] == '-project' and argv[8] == '-repository' and argv[10] == '-result':
+    if (
+        len(argv) == 12
+        and argv[0] == "-commit"
+        and argv[2] == "-accesstoken"
+        and argv[4] == "-organization"
+        and argv[6] == "-project"
+        and argv[8] == "-repository"
+        and argv[10] == "-result"
+    ):
         # Create rendering for the test result
         commit_hash = argv[1]
         access_token = argv[3]
@@ -171,28 +209,56 @@ def main(argv):
         project = project.replace(" ", "%20")
 
         # Use environment variable to read the protected access token if we are running in Azure DevOps
-        auth_method = 'Basic'
-        if access_token == 'USE_ENV_VARIABLE':
-            access_token = os.environ['SYSTEM_ACCESSTOKEN']
-            auth_method = 'Bearer'
+        auth_method = "Basic"
+        if access_token == "USE_ENV_VARIABLE":
+            access_token = os.environ["SYSTEM_ACCESSTOKEN"]
+            auth_method = "Bearer"
 
-        response = get_pull_request(commit_hash, auth_method, access_token, organization, project, repository)
+        response = get_pull_request(
+            commit_hash, auth_method, access_token, organization, project, repository
+        )
         pull_request_id = get_pull_request_id(response, commit_hash)
         work_items = get_work_items(response, commit_hash)
-        pull_request_closed_timestamp = get_pull_request_closed_timestamp(response, commit_hash)
+        pull_request_closed_timestamp = get_pull_request_closed_timestamp(
+            response, commit_hash
+        )
 
-        if result == 'pull_request_id':
+        if result == "pull_request_id":
             print(pull_request_id)
-        elif result == 'pull_request_closed_timestamp':
+        elif result == "pull_request_closed_timestamp":
             print(pull_request_closed_timestamp)
-        elif result == 'work_items':
-             [get_work_items_link(commit_hash, auth_method, access_token, organization, project, repository, work_item) for work_item in work_items]
-             if len(work_item_list) == 0:
+        elif result == "work_items":
+            [
+                get_work_items_link(
+                    commit_hash,
+                    auth_method,
+                    access_token,
+                    organization,
+                    project,
+                    repository,
+                    work_item,
+                )
+                for work_item in work_items
+            ]
+            if len(work_item_list) == 0:
                 print(f"<kbd>!MISSING!</kbd>")
-             for work_item_link in work_item_list:
-                print(f"<kbd><a href=\"{work_item_link}\">{work_item_link.rsplit('/',1)[1]}</a></kbd>")
+            for work_item_link in work_item_list:
+                print(
+                    f"<kbd><a href=\"{work_item_link}\">{work_item_link.rsplit('/',1)[1]}</a></kbd>"
+                )
+        elif result == "add_work_item_link":
+
+            [
+                link_work_item(
+                    work_item_id,
+                    auth_method,
+                    organization,
+                )
+                for work_item_id in work_items
+            ]
         else:
-            print('Invalid result argument')
+            print("Invalid result argument")
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
