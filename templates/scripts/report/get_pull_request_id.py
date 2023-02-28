@@ -90,7 +90,7 @@ def link_work_item(work_item, auth_method, access_token, organization):
             "path": "/relations/-",
             "value": {
                 "rel": "ArtifactLink",
-                "url": f"vstfs:///Build/Build/{os.getenv(BUILD_ID)}",
+                "url": f"vstfs:///Build/Build/{os.getenv('BUILD_ID')}",
                 "attributes": {
                     "comment": "Making a new link for the build",
                     "name": "Build",
