@@ -72,10 +72,21 @@ stages:
               ls -la
               echo "template_repo:"
               echo ${{ parameters.template_repo }}
-              echo "local branches:"
+
+              echo "local branches (QMS-TEMPLATE):"
+              cd QMS-TEMPLATE
               git branch
-              echo "remote branches:"
+              echo "remote branches (QMS-TEMPLATE):"
               git branch -r
+              cd ..
+
+              echo "local branches (qms-pipeline-templates):"
+              cd qms-pipeline-templates
+              git branch
+              echo "remote branches (qms-pipeline-templates):"
+              git branch -r
+              cd ..
+
               echo "triggering pull request merge commit:"
               echo $COMMIT_HASH
               echo "Build.Repository.Name:"
