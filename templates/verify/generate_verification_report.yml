@@ -119,7 +119,7 @@ stages:
               cd $(Build.Repository.Name)
 
               echo -e "================> ${PURPLE}Extracting and rendering requirements${NC}"
-              poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} > listOfRequirementsHtml.html
+              poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) > listOfRequirementsHtml.html
               poetry run python ../${{ parameters.render_replace_py_location }} -render ./listOfRequirementsHtml.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_REQUIREMENTS</var>"
               
               echo -e "================> ${PURPLE}Extracting and rendering design specifications${NC}"
