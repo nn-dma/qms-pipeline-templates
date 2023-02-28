@@ -84,29 +84,30 @@ def link_work_item(work_item, auth_method, access_token, organization):
 
     url = f"https://dev.azure.com/{organization}/_apis/wit/workitems/{work_item}?api-version=7.0"
 
-    payload = json.dumps(
-        {
-            "op": "add",
-            "path": "/relations/-",
-            "value": {
-                "rel": "ArtifactLink",
-                "url": f"vstfs:///Build/Build/{os.getenv('BUILD_ID')}",
-                "attributes": {
-                    "comment": "Making a new link for the build",
-                    "name": "Build",
-                },
+    payload = {
+        "op": "add",
+        "path": "/relations/-",
+        "value": {
+            "rel": "ArtifactLink",
+            "url": f"vstfs:///Build/Build/{os.getenv('BUILD_ID')}",
+            "attributes": {
+                "comment": "Making a new link for the build",
+                "name": "Build",
             },
-        }
-    )
+        },
+    }
+
+    print(payload)
 
     headers = {
         "Content-Type": "application/json-patch+json",
         "Authorization": f"{auth_method} {access_token}",
     }
 
-    response = requests.request("PATCH", url, headers=headers, data=payload)
+    response = requests.request("PATCH", url, headers=headers, json=payload)
 
     print(response.text)
+
 
 # TODO: Add exception handling
 def get_pull_request(
