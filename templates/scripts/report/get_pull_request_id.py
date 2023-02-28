@@ -252,6 +252,7 @@ def main(argv):
                 link_work_item(
                     work_item_id,
                     auth_method,
+                    access_token,
                     organization,
                 )
                 for work_item_id in work_items
