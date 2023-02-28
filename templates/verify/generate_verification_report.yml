@@ -64,6 +64,9 @@ stages:
               echo "current directory:"
               pwd
 
+              echo "branch:"
+              echo "origin/release/$(Build.SourceBranchName)"
+
               echo "copying poetry files to root"
               cp qms-pipeline-templates/pyproject.toml .
               cp qms-pipeline-templates/poetry.lock .
