@@ -100,7 +100,7 @@ def link_work_item(work_item, auth_method, access_token, organization):
     )
 
     headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json-patch+json",
         "Authorization": f"{auth_method} {access_token}",
     }
 
