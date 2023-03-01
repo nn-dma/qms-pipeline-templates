@@ -150,7 +150,7 @@ stages:
 
           - script: |
               cp ${{ parameters.verification_report_template_location }} VerificationReport_$(Build.BuildId).html
-            displayName: Rename populated verification report template file
+            displayName: Assign name and pipeline run id to verification report file
 
           - publish: VerificationReport_$(Build.BuildId).html
             artifact: verification_report
