@@ -148,7 +148,11 @@ stages:
               COMMIT_HASH: $(Build.SourceVersion)
             displayName: Generate verification report as HTML
 
-          - publish: ${{ parameters.verification_report_template_location }}
+          - script: |
+              cp ${{ parameters.verification_report_template_location }} VerificationReport_$(Build.BuildId).html
+            displayName: Rename populated verification report template file
+
+          - publish: VerificationReport_$(Build.BuildId).html
             artifact: verification_report
             displayName: Publish verification report as build artifact
 
