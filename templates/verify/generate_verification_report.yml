@@ -68,13 +68,19 @@ stages:
               cp qms-pipeline-templates/poetry.lock .
               poetry install
 
+              echo "branch:"
+              echo "origin/release/$(Build.SourceBranchName)"
+
               ls -la
               echo "template_repo:"
               echo ${{ parameters.template_repo }}
-              echo "local branches:"
+              cd qms-pipeline-templates
+              echo "local branches (${{ parameters.template_repo }}):"
               git branch
-              echo "remote branches:"
+              echo "remote branches (${{ parameters.template_repo }}):"
               git branch -r
+              cd ..
+
               echo "triggering pull request merge commit:"
               echo $COMMIT_HASH
               echo "Build.Repository.Name:"
@@ -98,26 +104,26 @@ stages:
               cat workItemsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>WORK_ITEM_LINKS</var>"
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<kbd><var>CHANGE_ITEM</var></kbd>"
-              
+
               echo -e "================> ${PURPLE}Extracting and rendering test results${NC}"
               poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/pv-json > testResultsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
-              
+
               echo -e "================> ${PURPLE}Entering '$(Build.Repository.Name)' for correct script execution context${NC}"
               cd $(Build.Repository.Name)
 
               echo -e "================> ${PURPLE}Extracting and rendering requirements${NC}"
-              poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} > listOfRequirementsHtml.html
+              poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) > listOfRequirementsHtml.html
               poetry run python ../${{ parameters.render_replace_py_location }} -render ./listOfRequirementsHtml.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_REQUIREMENTS</var>"
-              
+
               echo -e "================> ${PURPLE}Extracting and rendering design specifications${NC}"
-              poetry run python ../${{ parameters.render_design_specifications_py_location }} -folder ${{ parameters.system_design_path }} > listOfDesignSpecifications.html
+              poetry run python ../${{ parameters.render_design_specifications_py_location }} -folder ${{ parameters.system_design_path }} -branch origin/release/$(Build.SourceBranchName) > listOfDesignSpecifications.html
               poetry run python ../${{ parameters.render_replace_py_location }} -render ./listOfDesignSpecifications.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_DESIGN_SPECIFICATIONS</var>"
-              
+
               echo -e "================> ${PURPLE}Extracting and rendering configuration specifications${NC}"
-              poetry run python ../${{ parameters.render_configuration_specifications_py_location }} -folder ${{ parameters.system_configuration_path }} > listOfConfigurationSpecifications.html
+              poetry run python ../${{ parameters.render_configuration_specifications_py_location }} -folder ${{ parameters.system_configuration_path }} -branch origin/release/$(Build.SourceBranchName) > listOfConfigurationSpecifications.html
               poetry run python ../${{ parameters.render_replace_py_location }} -render ./listOfConfigurationSpecifications.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_CONFIGURATION_SPECIFICATIONS</var>"
-              
+
               echo -e "================> ${PURPLE}Exiting '$(Build.Repository.Name)' for correct script execution context${NC}"
               cd ..
 

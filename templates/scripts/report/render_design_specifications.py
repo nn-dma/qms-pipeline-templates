@@ -18,16 +18,15 @@ def extract_design_specification_tags(lines):
     #print(tags)
     return tags
 
-def extract_current_remote_branch():
-    # git branch remote
-    result = subprocess.run(['git', 'branch', '-r'], stdout=subprocess.PIPE)
-    return result.stdout.decode().strip()
+# def extract_current_remote_branch():
+#     # git branch remote
+#     result = subprocess.run(['git', 'branch', '-r'], stdout=subprocess.PIPE)
+#     return result.stdout.decode().strip()
 
-def extract_last_modified_commit_hash(filepath):
+def extract_last_modified_commit_hash(filepath, branch):
     # git log <remote branch> -n 1 --pretty=format:%H -- <filepath>
-    result = subprocess.run(['git', 'log', extract_current_remote_branch(), '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
-    # Use the following only when debugging locally!
-    #result = subprocess.run(['git', 'log', 'main', '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
+    #result = subprocess.run(['git', 'log', extract_current_remote_branch(), '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
+    result = subprocess.run(['git', 'log', branch, '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
     return result.stdout.decode()
 
 def extract_last_modified_commit_hash_timestamp(commit_hash):
@@ -47,11 +46,14 @@ def main(argv):
     #   e.g. 
     #       argv[0] is '-folder'
     #       argv[1] is './system_documentation/docs/design'
-    if len(argv) > 1 and argv[0] == '-folder':
+    if len(argv) > 1 and argv[0] == '-folder' and argv[2] == '-branch':
         # Render all design specifications
         # Find all .md files in the folder and subfolders
         path = r'%s/**/*.md' % argv[1]
         files = glob.glob(path, recursive=True)
+
+        # Get the current branch
+        branch = argv[3]
 
         # Render the table header and the table body element
         print('''<figure>
@@ -70,7 +72,7 @@ def main(argv):
         count_design_specifications = 0
         for file in files:
             #print(f"File: {file}")
-            last_modified_commit_hash = extract_last_modified_commit_hash(file)
+            last_modified_commit_hash = extract_last_modified_commit_hash(file, branch)
             last_modified_commit_hash_timestamp = extract_last_modified_commit_hash_timestamp(last_modified_commit_hash).strip().replace("'", "")
 
             with open(file, mode='r', encoding='utf-8') as file_reader:
