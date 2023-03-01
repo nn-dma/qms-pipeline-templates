@@ -222,6 +222,32 @@
             -->
             <article>
                 <h2>Verification test cases and results</h2>
+                <p>The following table lists all verification test cases and corresponding results, including:</p>
+                <ul>
+                    <li>Test case title</li>
+                    <li>Verification method, which can be either of:
+                        <ul>
+                            <li>"Automatic": The rationale for choosing this verification method is to facilitate continuous testing 
+                                in all environments.</li>
+                            <li>"Manual”: The rationale for choosing this verification method is, that the preferred method, “Automated testing”, 
+                                is not feasible, e.g. when design documentation review is the only way to verify a requirement.</li>
+                            <li>"Review by Exception": When using this verification method, the rationale will be stated explicily for each 
+                                test case in the table below.</li>.
+                        </ul></li>
+                    <li>Executed by: This will specify "Pipeline" for all automatic test cases, and initials for manual test cases. 
+                        For test cases using the "Review by Exception" method, the column will have "N/A" as the test case has not been
+                        executed as part of the verification process.</li>
+                    <li>Executed at: This will specify the time of execution. For test cases using the verification method 
+                        "Review by Exception" method, the column will have "N/A" as the test case has not been executed as part of 
+                        the verification process.</li>
+                    <li>Conclusion: Will state "Passed" for all test cases that have been successfully executed. For test cases using the 
+                        verification method  "Review by Exception" method, the column will have "N/A" as the test case has not been executed 
+                        as part of the verification process. Notice that due to the nature of the release pipeline, the verication report 
+                        will only be generated if all test cases (except those with verification method "Review by Exception") 
+                        have exected successfully.</li>
+                    <li>Trace to requirement: States which requirements are covered by the test case (traceability)</li>
+                </ul> 
+
                 <div style="width: 100%; text-align: left;">
                     <div style="width: 100%;">
                         <var>TESTCASE_RESULTS</var>
@@ -229,10 +255,6 @@
                 </div>
                 <a href="<var>ARTIFACTS_ADO_PIPELINE_LINK</var>" role="button">Report artifacts in pipeline (link to Azure DevOps)</a>
             </article>
-
-            <!-- rationale for chosen verification methods (static text blob) -->
-            <p>TODO: RATIONALE FOR CHOSEN VERIFICATION METHODS (BOILER PLATE INTRO TEXT + LIST OF EXPLICIT SCENARIOS WITH RATIONALE FOR VERIFICATION</p>
-
         </div>
     </main>
 </body>
