@@ -137,7 +137,7 @@ def main(argv):
                 <td>{feature.name}</td>
                 <td>{last_modified_commit_hash}</td>
                 <td>{last_modified_commit_hash_timestamp}</td>
-                <td>{os.path.basename(file)}</td>
+                <td>{os.path.abspath(file).replace(os.getcwd(), "")}</td>
             </tr>''')
                     #print(f'<div><h6>{os.path.basename(file)}</h6>')
                     #print(feature)
