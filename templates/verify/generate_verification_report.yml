@@ -42,8 +42,8 @@ stages:
             displayName: Download test results from artifact store
 
           - script: |
-              rm -rf $(Pipeline.Workspace)/{{ parameters.test_results_artifact_name }}/html
-              cd $(Pipeline.Workspace)/{{ parameters.test_results_artifact_name }}
+              rm -rf $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }}/html
+              cd $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }}
               ls -l
             condition: eq('${{ parameters.test_results_format }}', 'behave-allure')
             displayName: Remove HTML folder if it exists
