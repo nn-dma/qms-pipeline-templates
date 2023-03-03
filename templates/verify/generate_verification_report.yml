@@ -113,7 +113,7 @@ stages:
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<kbd><var>CHANGE_ITEM</var></kbd>"
 
               echo -e "================> ${PURPLE}Extracting and rendering test results${NC}"
-              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/{{ parameters.test_results_artifact_name }} > testResultsHtml.html
+              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }} > testResultsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
 
               echo -e "================> ${PURPLE}Entering '$(Build.Repository.Name)' for correct script execution context${NC}"
