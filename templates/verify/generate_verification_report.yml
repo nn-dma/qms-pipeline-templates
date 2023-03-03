@@ -18,6 +18,9 @@ parameters:
   ready_for: ""
 
 # Description:
+#   Allowed parameter values for
+#     ready_for: [ "production", "use"]
+#     test_results_format: [ "behave-allure"]
 
 # Purpose:
 
