@@ -45,7 +45,7 @@ stages:
               rm -rf $(Pipeline.Workspace)/{{ parameters.test_results_artifact_name }}/html
               cd $(Pipeline.Workspace)/{{ parameters.test_results_artifact_name }}
               ls -l
-            condition: eq(variables['{{ parameters.test_results_format }}'], 'behave-allure')
+            condition: eq(${{ parameters.test_results_format }}, 'behave-allure')
             displayName: Remove HTML folder if it exists
 
           - script: |
