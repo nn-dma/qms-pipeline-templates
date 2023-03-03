@@ -1,0 +1,45 @@
+parameters:
+  - name: stage_name
+    type: string
+
+  - name: dependsOn
+    type: object
+
+  - name: folder
+    type: string
+
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name }}
+    dependsOn: ${{ parameters.dependsOn }}
+    jobs:
+      - job: Check_against_compliance
+
+        steps:
+          # TODO: Implement cfn guard, cfn-nag, static code analysis etc.
+          - checkout: none
+
+          - script: |
+              cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
+            displayName: Restore caches
+            workingDirectory: $(System.DefaultWorkingDirectory)
+
+          - script: |
+              curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sh
+              curl -LJO https://github.com/aws-cloudformation/aws-guard-rules-registry
+            displayName: Setup environment
+
+          - script: |
+              pwd
+              ls
+            displayName:
+              Run CFN-GUARD
+              # cfn-guard validate --data cdk.out --rules /${INPUT_RULE_SET_NAME}.guard --show-summary fail -p
+
+          - publish: $(System.DefaultWorkingDirectory)/cdk.out
+            artifact: cdk.out
+            displayName: publish cdk.out
