@@ -35,7 +35,7 @@ stages:
           - checkout: ${{ parameters.template_repo }}
 
           - download: current
-            artifact: {{ parameters.test_results_artifact_name }}
+            artifact: ${{ parameters.test_results_artifact_name }}
             displayName: Download test results from artifact store
 
           - script: |
