@@ -1,0 +1,44 @@
+parameters:
+  - name: stage_name
+    type: string
+  - name: service_name
+    type: string
+  - name: template_repo
+    type: string
+  - name: feature_files_path
+    type: string
+
+# Description:
+
+# This will check for any "@manualIV" tags and pause the pipeline to perform manual IV
+
+
+stages:
+  - stage: ${{ parameters.stage_name }}
+    variables:
+      script_location: qms-pipeline-templates/templates/scripts/manual_iv.py
+    jobs:
+      - job: check_manualIV_job
+        # environment: "check_manualIV_job"
+        # TODO: Run with poetry
+        steps:
+          - checkout: self
+          - checkout: ${{parameters.template_repo}}
+
+          - script: |
+              cp $(Build.Repository.Name)/poetry.lock .
+              cp $(Build.Repository.Name)/pyproject.toml .
+              curl -sSL https://install.python-poetry.org | python -
+              poetry install
+            displayName: Setup environment
+
+          - script: |
+              set -e
+              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }}
+              if [ $? -eq 100 ]; then
+                echo "##vso[task.setvariable variable=status;isOutput=true]true
+              else
+                echo "##vso[task.setvariable variable=status;isOutput=true]false
+              fi
+            name: manualIV
+            displayName: Check for manual IV
