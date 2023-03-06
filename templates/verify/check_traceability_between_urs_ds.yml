@@ -20,6 +20,7 @@ stages:
   - stage: ${{ parameters.stage_name }}
     variables:
       script_location: qms-pipeline-templates/templates/scripts/check_traceability_between_urs_ds.py
+      dependency_location: qms-pipeline-templates/templates/scripts
     jobs:
       - job: Check_Traceability_between_URS_DS_job
         # environment: "check_traceability_between_urs_ds"
@@ -29,8 +30,9 @@ stages:
           - checkout: ${{parameters.template_repo}}
 
           - script: |
-              cp $(Build.Repository.Name)/poetry.lock .
-              cp $(Build.Repository.Name)/pyproject.toml .
+              cp ${{ variables.dependency_location }}/poetry.lock .
+              cp ${{ variables.dependency_location }}/pyproject.toml .
+
               curl -sSL https://install.python-poetry.org | python -
               poetry install
             displayName: Setup environment
