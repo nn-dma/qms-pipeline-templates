@@ -111,7 +111,7 @@ def main(argv):
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Requirement ID</th>
-                <th scope="col">Description title</th>
+                <th scope="col">Descriptive title</th>
                 <th scope="col">Version</th>
                 <th scope="col">Last modified</th>
                 <th scope="col">File</th>
