@@ -67,6 +67,9 @@ stages:
               echo -e "${PURPLE}render_replace_py_location:${NC} ${{ parameters.render_replace_py_location }}"
               echo -e "${PURPLE}render_requirements_py_location:${NC} ${{ parameters.render_requirements_py_location }}"
               echo -e "${PURPLE}get_pull_request_id_py_location:${NC} ${{ parameters.get_pull_request_id_py_location }}"
+              echo -e "${PURPLE}test_results_artifact_name:${NC} ${{ parameters.test_results_artifact_name }}"
+              echo -e "${PURPLE}test_results_format:${NC} ${{ parameters.test_results_format }}"
+              echo -e "${PURPLE}ready_for:${NC} ${{ parameters.ready_for }}"
               echo "======================================"
 
               echo "current directory:"
