@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: build_tag
     type: string
+  - name: dependsOn
+    type: object
 # Description:
 
 # Purpose:
@@ -12,7 +14,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name}}
-    dependsOn: []
+    dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - job: Build_Number_Tag
         steps:
