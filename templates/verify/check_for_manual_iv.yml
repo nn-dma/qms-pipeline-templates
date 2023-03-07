@@ -13,6 +13,7 @@ parameters:
 
 stages:
   - stage: ${{ parameters.stage_name }}
+    dependsOn: []
     variables:
       script_location: qms-pipeline-templates/templates/scripts/manual_iv.py
       dependency_location: qms-pipeline-templates/templates/scripts
