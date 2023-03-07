@@ -11,6 +11,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
+    dependsOn: []
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     variables:
       dependency_location: templates/scripts
