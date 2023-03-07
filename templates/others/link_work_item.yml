@@ -13,7 +13,7 @@ stages:
   - stage: ${{ parameters.stage_name }}
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     variables:
-      dependency_location: qms-pipeline-templates/templates/scripts
+      dependency_location: templates/scripts
     jobs:
       - job: link_to_workitem
         steps:
@@ -24,8 +24,6 @@ stages:
               cp ${{ variables.dependency_location }}/pyproject.toml .
               poetry install
 
-              ls -la
-              pwd
               poetry run python templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link
             displayName: Link to work item
             env:
