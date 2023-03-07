@@ -34,7 +34,6 @@ stages:
             displayName: Setup environment
 
           - script: |
-              set -e
               poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }}
               if [ $? -eq 100 ]; then
                 echo "##vso[task.setvariable variable=status;isOutput=true]true"
