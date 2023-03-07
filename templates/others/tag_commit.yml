@@ -14,7 +14,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name}}
-    dependsOn: ${{ parameters.dependsOn }}
+    dependsOn: []
     jobs:
       - job: Build_Number_Tag
         steps:
