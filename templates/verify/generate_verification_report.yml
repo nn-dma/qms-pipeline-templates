@@ -28,6 +28,8 @@ parameters:
 stages:
   - stage: ${{ parameters.stage_name }}
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    variables:
+      dependency_location: qms-pipeline-templates/templates/scripts
     jobs:
       - job: generate_verification_report
         workspace:
@@ -71,8 +73,8 @@ stages:
               pwd
 
               echo "copying poetry files to root"
-              cp qms-pipeline-templates/pyproject.toml .
-              cp qms-pipeline-templates/poetry.lock .
+              cp ${{ variables.dependency_location }}/poetry.lock .
+              cp ${{ variables.dependency_location }}/pyproject.toml .
               poetry install
 
               echo "branch:"
