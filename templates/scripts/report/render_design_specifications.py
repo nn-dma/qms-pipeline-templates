@@ -42,10 +42,12 @@ def main(argv):
         exit(1)
 
     # 2. Check for the arg pattern:
-    #   python3 render_design_specifications.py -folder <filepath>
+    #   python3 render_design_specifications.py -folder <filepath> -branch <branch>
     #   e.g. 
     #       argv[0] is '-folder'
     #       argv[1] is './system_documentation/docs/design'
+    #       argv[2] is '-branch'
+    #       argv[3] is 'origin/release/service1'
     if len(argv) > 1 and argv[0] == '-folder' and argv[2] == '-branch':
         # Render all design specifications
         # Find all .md files in the folder and subfolders
