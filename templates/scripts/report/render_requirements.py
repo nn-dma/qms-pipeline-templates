@@ -39,14 +39,8 @@ def extract_features(lines):
 
     return features
 
-# def extract_current_remote_branch():
-#     # git branch remote
-#     result = subprocess.run(['git', 'branch', '-r'], stdout=subprocess.PIPE)
-#     return result.stdout.decode().strip()
-
 def extract_last_modified_commit_hash(filepath, branch):
     # git log <remote branch> -n 1 --pretty=format:%H -- <filepath>
-    #result = subprocess.run(['git', 'log', extract_current_remote_branch(), '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
     result = subprocess.run(['git', 'log', branch, '-n', '1', '--pretty=format:%H', '--', filepath], stdout=subprocess.PIPE)
     return result.stdout.decode()
 
@@ -74,28 +68,13 @@ def main(argv):
         exit(1)
 
     # 1. Check for the arg pattern:
-    #   python3 get_requirements.py -features <filepath> -tags [<tag1>, <tag2> ...]
-    #   e.g. 
-    #       argv[0] is '-features'
-    #       argv[1] is './../features'
-    #       argv[2] is '-tags'
-    #       argv[3] is 'tag1'
-    #       argv[4] is 'tag2'
-    # if len(argv) > 3 and argv[2] == '-tags':
-    #     # Collect tags to render feature descriptions for
-    #     print("Got -tags")
-    #     for arg in argv[3:]:
-    #         if arg[0] == '-':
-    #             print(f"Unexpected argument: {arg}")
-    #             exit(1)
-    #         print(arg)
-
-    # 2. Check for the arg pattern:
-    #   python3 get_requirements.py -folder <filepath>
+    #   python3 get_requirements.py -folder <filepath> -branch <remote branch>
     #   e.g. 
     #       argv[0] is '-folder'
     #       argv[1] is './../features'
-    if len(argv) > 1 and argv[0] == '-folder' and argv[2] == '-branch':
+    #       argv[2] is '-branch'
+    #       argv[3] is 'origin/release/service1'
+    if len(argv) == 4 and argv[0] == '-folder' and argv[2] == '-branch':
         # Render all feature descriptions
         # Find all .feature files in the folder and subfolders
         path = r'%s/**/*.feature' % argv[1]
@@ -104,6 +83,9 @@ def main(argv):
         # Get the current branch
         branch = argv[3]
 
+        # TODO: Add link to path for files, e.g.:
+        # https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_git/QMS-TEMPLATE?path=/requirements/features/urs/functionality1.feature
+        
         # Render the table header and the table body element
         print('''<figure>
     <table>
@@ -139,9 +121,6 @@ def main(argv):
                 <td>{last_modified_commit_hash_timestamp}</td>
                 <td>{os.path.abspath(file).replace(os.getcwd(), "")}</td>
             </tr>''')
-                    #print(f'<div><h6>{os.path.basename(file)}</h6>')
-                    #print(feature)
-                    #print('</div>')
 
         # Render the table body close elements
         print('''        </tbody>
