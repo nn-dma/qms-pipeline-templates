@@ -80,6 +80,8 @@ if __name__ == "__main__":
     else:
         exclude_tags = []
 
+    print(exclude_tags)
+
     # Build a list of all URS_IDs in the features files
     features = build_feature_files(feature_files_path)
     feature_tags = construct_non_generic_tag_list(features, exclude_tags)
