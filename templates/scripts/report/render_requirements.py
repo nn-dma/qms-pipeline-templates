@@ -124,7 +124,7 @@ def main(argv):
                 features = extract_features(lines)
                 # Extract the path to the feature file, e.g.:
                 # /requirements/features/urs/functionality1.feature
-                repository_file_path = {os.path.abspath(file).replace(os.getcwd(), "")}
+                repository_file_path = os.path.abspath(file).replace(os.getcwd(), "")
                 # Create link to path for file, e.g.:
                 # https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_git/QMS-TEMPLATE?path=/requirements/features/urs/functionality1.feature
                 repository_file_link = f'https://dev.azure.com/{organization}/{project}/_git/{repository}?path={repository_file_path}'
