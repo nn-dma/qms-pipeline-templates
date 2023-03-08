@@ -1,14 +1,10 @@
 parameters:
-  - name: stage_name
-    type: string
-  - name: service_name
-    type: string
-  - name: template_repo
-    type: string
-  - name: feature_files_path
-    type: string
-  - name: system_design_path
-    type: string
+  stage_name: ""
+  service_name: ""
+  template_repo: ""
+  feature_files_path: ""
+  system_design_path: ""
+  exclude_tags: "[]"
 
 # Description:
 
@@ -39,5 +35,5 @@ stages:
 
           - script: |
               set -e
-              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }}
+              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} ${{ parameters.exclude_tags }}
             displayName: Check traceability between URS and DS

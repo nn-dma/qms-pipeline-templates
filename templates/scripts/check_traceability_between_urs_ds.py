@@ -1,6 +1,7 @@
 import sys
 import glob
 import re
+import json
 from behave.runner_util import parse_features, collect_feature_locations
 from behave.configuration import Configuration
 
@@ -15,11 +16,12 @@ def build_feature_files(feature_files_path):
     return features
 
 
-def construct_non_generic_tag_list(features):
+def construct_non_generic_tag_list(features, exclude_list):
 
     # Build list of features in feature files
-    allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"]
+    allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"] + exclude_list
     taglist = [feature.tags for feature in features]
+
     non_classification_tags = [
         tag for tags in taglist for tag in tags if tag not in allowlist
     ]
@@ -44,15 +46,21 @@ def get_tags_of_markdown_files(docs_path):
     for file in markdown_files:
         f = open(file, "r")
         text = f.read()
-        tag_text = re.findall(r"(?s)(?<=---)(.*)(?=---)", text)
-
-        if len(tag_text) != 0:
-            tags = [
-                ii.replace(" ", "").replace("-", "") #TODO this needs to be revisited
-                for ii in (tag_text[0].split("\n"))
-                if "-" in ii
-            ]
+        matches = re.findall(
+            r"/---\ntags:\n\s+-\s+(\w+)\n(?:\s+-\s+(\w+)\n)*---/g", text
+        )
+        print(matches)
+        for match in matches:
+            print(match)
+            tags = [tag for tag in match if tag]
+            print(tags)
             taglist.extend(tags)
+
+        # print(matches)
+
+        # if len(matches) != 0:
+        #     tags = [ii for ii in (matches)]
+        #     taglist.extend(tags)
 
     return taglist
 
@@ -74,9 +82,18 @@ if __name__ == "__main__":
     feature_files_path = sys.argv[1]
     docs_path = sys.argv[2]
 
+    print(sys.argv[3])
+
+    if len(sys.argv) > 2:
+        exclude_tags = json.loads(sys.argv[3])
+    else:
+        exclude_tags = []
+
+    print(exclude_tags)
+
     # Build a list of all URS_IDs in the features files
     features = build_feature_files(feature_files_path)
-    feature_tags = construct_non_generic_tag_list(features)
+    feature_tags = construct_non_generic_tag_list(features, exclude_tags)
     print(f"The following URS IDs were found in the .feature files: {feature_tags}")
 
     # Check for duplicates in the URS_IDs
