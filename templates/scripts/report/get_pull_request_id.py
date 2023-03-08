@@ -187,7 +187,7 @@ def main(argv):
     #        argv[4] is '-organization'
     #        argv[5] is 'novonordiskit'
     #        argv[6] is '-project'
-    #        argv[7] is 'Data%20Management%20and%20Analytics'
+    #        argv[7] is 'Data Management and Analytics'
     #        argv[8] is '-repository'
     #        argv[9] is 'QMS-TEMPLATE'
     #        argv[10] is '-result'
