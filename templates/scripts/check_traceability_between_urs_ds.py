@@ -49,8 +49,9 @@ def get_tags_of_markdown_files(docs_path):
         matches = re.findall(
             r"/---\ntags:\n\s+-\s+(\w+)\n(?:\s+-\s+(\w+)\n)*---/g", text
         )
-
+        print(matches)
         for match in matches:
+            print(match)
             tags = [tag for tag in match if tag]
             print(tags)
             taglist.extend(tags)
