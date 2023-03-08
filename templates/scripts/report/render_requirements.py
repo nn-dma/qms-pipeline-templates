@@ -74,7 +74,13 @@ def main(argv):
     #       argv[1] is './../features'
     #       argv[2] is '-branch'
     #       argv[3] is 'origin/release/service1'
-    if len(argv) == 4 and argv[0] == '-folder' and argv[2] == '-branch':
+    #       argv[4] is '-organization'
+    #       argv[5] is 'novonordiskit'
+    #       argv[6] is '-project'
+    #       argv[7] is 'Data Management and Analytics'
+    #       argv[8] is '-repository'
+    #       argv[9] is 'QMS-TEMPLATE'
+    if len(argv) == 4 and argv[0] == '-folder' and argv[2] == '-branch' and argv[4] == '-organization' and argv[6] == '-project' and argv[8] == '-repository':
         # Render all feature descriptions
         # Find all .feature files in the folder and subfolders
         path = r'%s/**/*.feature' % argv[1]
@@ -82,9 +88,12 @@ def main(argv):
 
         # Get the current branch
         branch = argv[3]
+        organization = argv[5]
+        project = argv[7]
+        repository = argv[9]
 
-        # TODO: Add link to path for files, e.g.:
-        # https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_git/QMS-TEMPLATE?path=/requirements/features/urs/functionality1.feature
+        # URL encode the project name
+        project = project.replace(" ", "%20")
         
         # Render the table header and the table body element
         print('''<figure>
@@ -103,13 +112,16 @@ def main(argv):
 
         count_features = 0
         for file in files:
-            #print(f"File: {file}")
             last_modified_commit_hash = extract_last_modified_commit_hash(file, branch)
             last_modified_commit_hash_timestamp = extract_last_modified_commit_hash_timestamp(last_modified_commit_hash).strip().replace("'", "")
 
             with open(file, mode='r', encoding='utf-8') as file_reader:
                 lines = file_reader.read().split('\n')
                 features = extract_features(lines)
+                repository_file_path = {os.path.abspath(file).replace(os.getcwd(), "")}
+                # Createlink to path for files, e.g.:
+                # https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_git/QMS-TEMPLATE?path=/requirements/features/urs/functionality1.feature
+                repository_file_link = f'https://dev.azure.com/{organization}/{project}/_git/{repository}?path={repository_file_path}'
 
                 for feature in features:
                     count_features += 1
@@ -119,7 +131,7 @@ def main(argv):
                 <td>{feature.name}</td>
                 <td>{last_modified_commit_hash}</td>
                 <td>{last_modified_commit_hash_timestamp}</td>
-                <td>{os.path.abspath(file).replace(os.getcwd(), "")}</td>
+                <td><a href="{repository_file_link}" target="_blank">{repository_file_path}</a></td>
             </tr>''')
 
         # Render the table body close elements
