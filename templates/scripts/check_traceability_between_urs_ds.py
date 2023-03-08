@@ -1,6 +1,7 @@
 import sys
 import glob
 import re
+import json
 from behave.runner_util import parse_features, collect_feature_locations
 from behave.configuration import Configuration
 
@@ -75,8 +76,10 @@ if __name__ == "__main__":
     feature_files_path = sys.argv[1]
     docs_path = sys.argv[2]
 
+    print(sys.argv[3])
+
     if len(sys.argv) > 2:
-        exclude_tags = list(sys.argv[3])
+        exclude_tags = json.loads(sys.argv[3])
     else:
         exclude_tags = []
 
