@@ -118,8 +118,10 @@ def main(argv):
             with open(file, mode='r', encoding='utf-8') as file_reader:
                 lines = file_reader.read().split('\n')
                 features = extract_features(lines)
+                # Extract the path to the feature file, e.g.:
+                # /requirements/features/urs/functionality1.feature
                 repository_file_path = {os.path.abspath(file).replace(os.getcwd(), "")}
-                # Createlink to path for files, e.g.:
+                # Create link to path for file, e.g.:
                 # https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_git/QMS-TEMPLATE?path=/requirements/features/urs/functionality1.feature
                 repository_file_link = f'https://dev.azure.com/{organization}/{project}/_git/{repository}?path={repository_file_path}'
 
