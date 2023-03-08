@@ -68,7 +68,7 @@ def main(argv):
         exit(1)
 
     # 1. Check for the arg pattern:
-    #   python3 get_requirements.py -folder <filepath> -branch <remote branch>
+    #   python3 get_requirements.py -folder <filepath> -branch <remote branch> -organization <organization> -project <project> -repository <repository>
     #   e.g. 
     #       argv[0] is '-folder'
     #       argv[1] is './../features'
@@ -80,7 +80,7 @@ def main(argv):
     #       argv[7] is 'Data Management and Analytics'
     #       argv[8] is '-repository'
     #       argv[9] is 'QMS-TEMPLATE'
-    if len(argv) == 4 and argv[0] == '-folder' and argv[2] == '-branch' and argv[4] == '-organization' and argv[6] == '-project' and argv[8] == '-repository':
+    if len(argv) == 10 and argv[0] == '-folder' and argv[2] == '-branch' and argv[4] == '-organization' and argv[6] == '-project' and argv[8] == '-repository':
         # Render all feature descriptions
         # Find all .feature files in the folder and subfolders
         path = r'%s/**/*.feature' % argv[1]
