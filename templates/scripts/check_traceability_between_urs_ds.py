@@ -46,22 +46,10 @@ def get_tags_of_markdown_files(docs_path):
     for file in markdown_files:
         f = open(file, "r")
         text = f.read()
-        matches = re.findall(
-            r"/---\ntags:\n\s+-\s+(\w+)\n(?:\s+-\s+(\w+)\n)*---/g", text
-        )
-        print(matches)
-        for match in matches:
-            print(match)
-            tags = [tag for tag in match if tag]
-            print(tags)
-            taglist.extend(tags)
+        tags = [ii.replace("  - ", "") for ii in re.findall("\s\s-\s\w+", text)]
+        taglist.extend(tags)
 
-        # print(matches)
-
-        # if len(matches) != 0:
-        #     tags = [ii for ii in (matches)]
-        #     taglist.extend(tags)
-
+    print(taglist)
     return taglist
 
 
