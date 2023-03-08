@@ -66,6 +66,10 @@ def main(argv):
     if len(argv) == 0:
         print("No arguments provided")
         exit(1)
+    # Guard clause, too few arguments provided
+    if len(argv) < 10:
+        print("Not all required arguments provided")
+        exit(1)
 
     # 1. Check for the arg pattern:
     #   python3 get_requirements.py -folder <filepath> -branch <remote branch> -organization <organization> -project <project> -repository <repository>
