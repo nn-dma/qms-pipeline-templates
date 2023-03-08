@@ -76,7 +76,7 @@ if __name__ == "__main__":
     docs_path = sys.argv[2]
 
     if len(sys.argv) > 2:
-        exclude_tags = sys.argv[3]
+        exclude_tags = list(sys.argv[3])
     else:
         exclude_tags = []
 
