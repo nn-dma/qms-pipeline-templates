@@ -57,6 +57,9 @@ stages:
               NC='\033[0m'        # No Color
 
               echo -e "============= ${PURPLE}PARAMETERS${NC} ============="
+              echo -e "${PURPLE}stage_name:${NC} ${{ parameters.stage_name }}"
+              echo -e "${PURPLE}environment_name:${NC} ${{ parameters.environment_name }}"
+              echo -e "${PURPLE}it_solution_name:${NC} ${{ parameters.it_solution_name }}"
               echo -e "${PURPLE}feature_files_path:${NC} ${{ parameters.feature_files_path }}"
               echo -e "${PURPLE}system_design_path:${NC} ${{ parameters.system_design_path }}"
               echo -e "${PURPLE}system_configuration_path:${NC} ${{ parameters.system_configuration_path }}"
