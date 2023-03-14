@@ -2,7 +2,7 @@ parameters:
   - name: stage_name
     type: string
 
-  - name: check_for_install_scripts_stage_name
+  - name: check_for_configuration specifications_stage_name
     type: string
 
   - name: environment
@@ -17,7 +17,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
-    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_install_scripts_stage_name }}.outputs['check_scripts.scripts.instScript'], 'true'))
+    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_configuration specifications_stage_name }}.outputs['check_scripts.scripts.instScript'], 'true'))
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - deployment: Execute_Installation_Script
