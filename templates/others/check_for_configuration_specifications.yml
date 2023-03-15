@@ -23,7 +23,7 @@ stages:
 
           - script: |
 
-              chmod 777 ${{variables.check_install_script_location}}
+              chmod +x ${{variables.check_install_script_location}}
 
               echo "hello"
               ${{variables.check_install_script_location}} ${{parameters.script_path}}
