@@ -171,13 +171,13 @@ stages:
 
           - script: |
               cp ${{ parameters.verification_report_template_location }} $VERIFICATION_REPORT_FILENAME
-              echo -e "${PURPLE}VERIFICATION_REPORT_NAME:${NC} $VERIFICATION_REPORT_FILENAME"
+              echo -e "${PURPLE}VERIFICATION_REPORT_FILENAME:${NC} $VERIFICATION_REPORT_FILENAME"
             env:
               VERIFICATION_REPORT_FILENAME: VerificationReport_${{ lower( replace(parameters.environment_name, ' ', '_') ) }}_$(Build.BuildId).html
             displayName: Assign name and pipeline run id to verification report file
 
           - publish: VerificationReport_${{ lower( replace(parameters.environment_name, ' ', '_') ) }}_$(Build.BuildId).html
-            artifact: verification_report
+            artifact: verification_report_${{ parameters.ready_for }}
             displayName: Publish verification report as build artifact
 
           
