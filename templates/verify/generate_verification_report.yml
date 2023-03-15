@@ -182,12 +182,12 @@ stages:
               PURPLE='\033[0;35m' # Purple
               NC='\033[0m'        # No Color
 
-              cp ${{ parameters.verification_report_template_location }} ${{ variables.verification_report_file }}
+              cp ${{ parameters.verification_report_template_location }} $(verification_report_file)
               ls -la
-              echo -e "${PURPLE}VERIFICATION_REPORT_FILE:${NC} ${{ variables.verification_report_file }}"
+              echo -e "${PURPLE}VERIFICATION_REPORT_FILE:${NC} $(verification_report_file)"
             displayName: Assign name and other metadata to verification report file
 
-          - publish: ${{ variables.verification_report_file }}
+          - publish: $(verification_report_file)
             artifact: verification_report_${{ parameters.ready_for }}
             displayName: Publish verification report as build artifact
 
