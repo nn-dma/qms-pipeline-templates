@@ -31,7 +31,7 @@ stages:
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     variables:
       dependency_location: qms-pipeline-templates/templates/scripts
-      verification_report_name: $(${{ parameters.get_verification_report_name_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html
+      verification_report_file: null
     jobs:
       - job: generate_verification_report
         workspace:
@@ -75,9 +75,6 @@ stages:
               echo -e "${PURPLE}test_results_artifact_name:${NC} ${{ parameters.test_results_artifact_name }}"
               echo -e "${PURPLE}test_results_format:${NC} ${{ parameters.test_results_format }}"
               echo -e "${PURPLE}ready_for:${NC} ${{ parameters.ready_for }}"
-
-              echo -e "============= ${PURPLE}GENERATED${NC} =============="
-              echo -e "${PURPLE}verification_report_name:${NC} ${{ variables.verification_report_name }}"
               echo "======================================="
 
               echo "current directory:"
@@ -181,14 +178,12 @@ stages:
               PURPLE='\033[0;35m' # Purple
               NC='\033[0m'        # No Color
 
-              cp ${{ parameters.verification_report_template_location }} ${{ variables.verification_report_name }}
+              cp ${{ parameters.verification_report_template_location }} ${{ variables.verification_report_file }}
               ls -la
-              cat ${{ variables.verification_report_name }}
-              echo -e "${PURPLE}VERIFICATION_REPORT_NAME:${NC} ${{ variables.verification_report_name }}"
               echo -e "${PURPLE}VERIFICATION_REPORT_FILE:${NC} ${{ variables.verification_report_file }}"
             displayName: Assign name and other metadata to verification report file
 
-          - publish: ${{ variables.verification_report_name }}
+          - publish: ${{ variables.verification_report_file }}
             artifact: verification_report_${{ parameters.ready_for }}
             displayName: Publish verification report as build artifact
 
