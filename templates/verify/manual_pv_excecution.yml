@@ -1,0 +1,32 @@
+parameters:
+  - name: stage_name
+    type: string
+
+  - name: check_for_manual_pv_stage_name
+    type: string
+
+  - name: environment
+    type: string
+
+  - name: dependsOn
+    type: object
+# Description:
+
+# Purpose:
+
+# Expected output:
+stages:
+  - stage: ${{ parameters.stage_name }}
+    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_manual_pv_stage_name }}.check_manualPV_job.outputs['manualPV.status'], 'true'))
+    dependsOn: ${{ parameters.dependsOn }}
+    jobs:
+      - deployment: Execute_Manual_PV
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - bash: echo "Please execute the manual PV steps"
+
+
+

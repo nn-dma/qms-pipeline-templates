@@ -1,0 +1,44 @@
+parameters:
+  - name: stage_name
+    type: string  
+  - name: template_repo
+    type: string
+  - name: feature_files_path
+    type: string
+
+# Description:
+
+# This will check for any "@manualPV" tags and pause the pipeline to perform manual PV
+
+
+stages:
+  - stage: ${{ parameters.stage_name }}
+    dependsOn: []
+    variables:
+      script_location: qms-pipeline-templates/templates/scripts/manual_pv.py
+      dependency_location: qms-pipeline-templates/templates/scripts
+    jobs:
+      - job: check_manualPV_job
+        # environment: "check_manualPV_job"
+        # TODO: Run with poetry
+        steps:
+          - checkout: self
+          - checkout: ${{parameters.template_repo}}
+
+          - script: |
+              cp ${{ variables.dependency_location }}/poetry.lock .
+              cp ${{ variables.dependency_location }}/pyproject.toml .
+
+              curl -sSL https://install.python-poetry.org | python -
+              poetry install
+            displayName: Setup environment
+
+          - script: |
+              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }}
+              if [ $? -eq 100 ]; then
+                echo "##vso[task.setvariable variable=status;isOutput=true]true"
+              else
+                echo "##vso[task.setvariable variable=status;isOutput=true]false"
+              fi
+            name: manualPV
+            displayName: Check for manual PV
