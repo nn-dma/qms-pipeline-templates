@@ -1,6 +1,9 @@
 parameters:
   - name: stage_name
     type: string
+  - name: dependsOn
+    type: object
+    default: []
 # Description:
 
 # Purpose:
