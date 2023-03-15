@@ -14,6 +14,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name}}
+    condition: not(or(failed(), canceled()))
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - job: Build_Number_Tag
