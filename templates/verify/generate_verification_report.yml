@@ -31,6 +31,7 @@ stages:
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     variables:
       dependency_location: qms-pipeline-templates/templates/scripts
+      verification_report_name: $(${{ parameters.get_verification_report_name_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html
     jobs:
       - job: generate_verification_report
         workspace:
@@ -75,6 +76,7 @@ stages:
               echo -e "${PURPLE}test_results_format:${NC} ${{ parameters.test_results_format }}"
               echo -e "${PURPLE}ready_for:${NC} ${{ parameters.ready_for }}"
               echo "======================================"
+              echo -e "${PURPLE}verification_report_name:${NC} $(verification_report_name)"
 
               echo "current directory:"
               pwd
@@ -170,14 +172,17 @@ stages:
               COMMIT_HASH: $(Build.SourceVersion)
             displayName: Generate verification report as HTML
 
+          - bash: echo "##vso[task.setvariable variable=verification_report_filename]$(${{ parameters.get_verification_report_name_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html"
+            displayName: Generate verification report filename
+
           - script: |
               cp ${{ parameters.verification_report_template_location }} $VERIFICATION_REPORT_FILENAME
               echo -e "${PURPLE}VERIFICATION_REPORT_FILENAME:${NC} $VERIFICATION_REPORT_FILENAME"
             env:
-              VERIFICATION_REPORT_FILENAME: $(./${{ parameters.get_pull_request_id_py_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html
+              VERIFICATION_REPORT_FILENAME: ${{ variables.verification_report_filename }}
             displayName: Assign name and pipeline run id to verification report file
 
-          - publish: $(./${{ parameters.get_pull_request_id_py_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html
+          - publish: ${{ variables.verification_report_filename }}
             artifact: verification_report_${{ parameters.ready_for }}
             displayName: Publish verification report as build artifact
 
