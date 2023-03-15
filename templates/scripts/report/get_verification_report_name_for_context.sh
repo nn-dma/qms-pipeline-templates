@@ -8,7 +8,9 @@
 #
 # Example usage:
 # ./get_verification_report_name_for_context.sh "ramone-service1-val-eu-central1" "617829" "use"
+#    > VerificationReport_validation_617829_ramone_service1_val_eu_central1
 # ./get_verification_report_name_for_context.sh "ramone-service1-val-eu-central1" "617829" "production"
+#    > VerificationReport_production_617829_ramone_service1_val_eu_central1
 
 
 #################
