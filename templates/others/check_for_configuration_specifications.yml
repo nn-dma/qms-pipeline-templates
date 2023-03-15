@@ -13,7 +13,7 @@ stages:
   - stage: ${{parameters.stage_name}}
     dependsOn: []
     variables:
-      check_install_script_location: qms-pipeline-templates/templates/scripts/install_scripts.sh
+      check_install_script_location: ../qms-pipeline-templates/templates/scripts/install_scripts.sh
     jobs:
       - job: installation_script_check
         steps:
@@ -26,7 +26,7 @@ stages:
               chmod +x ${{variables.check_install_script_location}}
 
               echo "hello"
-              ${{variables.check_install_script_location}} ${{parameters.script_path}}
+              # ${{variables.check_install_script_location}} ${{parameters.script_path}}
               echo "hello"
               cd $(Build.Repository.Name)
               instScript=$(${{variables.check_install_script_location}} ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
