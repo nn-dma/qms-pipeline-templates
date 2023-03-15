@@ -5,7 +5,9 @@ parameters:
     type: string
   - name: feature_files_path
     type: string
-
+  - name: dependsOn
+    type: object
+    default: []
 # Description:
 
 # This will check for any "@manualPV" tags and pause the pipeline to perform manual PV
@@ -13,7 +15,7 @@ parameters:
 
 stages:
   - stage: ${{ parameters.stage_name }}
-    dependsOn: []
+    dependsOn: ${{ parameters.dependsOn }}
     variables:
       script_location: qms-pipeline-templates/templates/scripts/manual_pv.py
       dependency_location: qms-pipeline-templates/templates/scripts
