@@ -24,8 +24,12 @@ parameters:
 #     test_results_format: [ "behave-allure"]
 
 # Purpose:
+#   This template is used to generate a verification report for a given environment [validation|production]
+#   based on provided context of what is being verified (i.e. released) and test execution results.
 
 # Expected output:
+#   A verification report in HTML format is generated and stored in the artifact store.
+
 stages:
   - stage: ${{ parameters.stage_name }}
     condition: and(not(or(failed(), canceled())), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
