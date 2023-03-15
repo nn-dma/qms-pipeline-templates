@@ -17,7 +17,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
-    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_configuration_specifications_stage_name }}.outputs['check_scripts.scripts.instScript'], 'true'))
+    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_configuration_specifications_stage_name }}.outputs['installation_script_check.scripts.instScript'], 'true'))
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - deployment: Execute_Installation_Script
