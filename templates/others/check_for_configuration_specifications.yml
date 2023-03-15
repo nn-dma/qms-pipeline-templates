@@ -2,6 +2,7 @@ parameters:
   stage_name: ""
   template_repo: ""
   script_path: ""
+  depends_on: []
 
 # Description:
 

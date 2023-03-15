@@ -5,6 +5,7 @@ parameters:
   feature_files_path: ""
   system_design_path: ""
   exclude_tags: "[]"
+  dependsOn: []
 
 # Description:
 

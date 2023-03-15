@@ -4,6 +4,10 @@ parameters:
 
   - name: template_repo
     type: string
+
+  - name: dependsOn
+    type: object
+    default: []
 # Description:
 
 # Purpose:
