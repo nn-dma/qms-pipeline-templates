@@ -1,7 +1,7 @@
 parameters:
   stage_name: ""
   template_repo: ""
-  script_path: ""
+  operations_path: ""
 
 # Description:
 
@@ -12,9 +12,9 @@ stages:
   - stage: ${{parameters.stage_name}}
     dependsOn: []
     variables:
-      check_install_script_location: qms-pipeline-templates/templates/scripts/install_scripts.sh
+      check_install_script_location: qms-pipeline-templates/templates/scripts/o_and_m.sh
     jobs:
-      - job: installation_script_check
+      - job: o_and_m_check
         steps:
           - checkout: self
           - checkout: ${{parameters.template_repo}}
@@ -22,8 +22,8 @@ stages:
           - script: |
               ls
               chmod 777 ${{variables.check_install_script_location}}
-              ${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}
-              instScript=$(${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
+              ${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.operations_path}}
+              instScript=$(${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.operations_path}}  | grep "instScript" | cut -d'=' -f 2)
               echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
-              echo "Release has Installation Script changes: $instScript"
+              echo "Release has O&M changes: $instScript"
             name: scripts
