@@ -13,13 +13,82 @@ def build_feature_files(feature_files_path):
     locations = collect_feature_locations(config.paths)
     features = parse_features(locations)
 
-    return features
+    return features, locations
 
 
-def construct_non_generic_tag_list(features, exclude_list):
+def ensure_id(features, allowlist):
+    """
+    Check that every feature has an ID, outside the allowlist
+    """
+    for ii in features:
+
+        # Only check URS features
+        if "URS" not in ii.tags:
+            continue
+
+        tag_on_feature = [tag for tag in ii.tags if tag not in allowlist]
+
+        if len(tag_on_feature) < 1:
+            raise Exception(f"Every feature needs unique ID: {ii} does not contain ID")
+
+    print("ID check successful. All URSs have IDs.")
+
+
+def ensure_tag_coverage(features):
+    """
+    Check presence of IV and pIV tags
+    """
+    # Nested comprehension to pick out all tag combinations for all scenarios
+    tags = [
+        tags
+        for feature in features
+        for scenario in feature.scenarios
+        for tags in scenario.tags
+    ]
+    assert "IV" in tags, "IV must be among scenario tags"
+
+    assert "pIV" in tags, "pIV must be among scenario tags"
+
+    print("IV and pIV are both mentioned in .feature files")
+
+
+def ensure_urs_scenarios(features):
+    """
+    Ensure URS features have test cases
+    """
+    for feature in features:
+        if "URS" in feature.tags:
+            assert len(feature.scenarios) > 0, "URS features must have test cases"
+            for scenario in feature.scenarios:
+                assert (
+                    "PV" in scenario.tags
+                ), f"URS features must have test cases. {feature} does not"
+
+    print("URS features have test cases")
+
+
+def ensure_review_by_exception_rationale(features, locations):
+    """
+    Check that a rationale have been provided for @ReviewByException tags
+    """
+    for location, feature in zip(locations, features):
+
+        # Get nr of scenarios tagged with ReviewByException
+        nr_exceptions = len([tag for scenario in feature.scenarios for tag in scenario.tags if tag == "ReviewByException"])
+
+        if nr_exceptions > 0:
+
+            # Regex to capture comment block between tags and Scenario 
+            f = open(location.filename, "r")
+            text = f.read()
+
+            rationale = re.findall(r".*@ReviewByException.*\n(?:\s+#.*\n)+\s+Scenario:", text)
+            assert nr_exceptions == len(rationale), "Every ReviewByException needs a rationale"
+    print("All ReviewByException scenarios have rationales")
+
+def construct_non_generic_tag_list(features, allowlist):
 
     # Build list of features in feature files
-    allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"] + exclude_list
     taglist = [feature.tags for feature in features]
 
     non_classification_tags = [
@@ -49,7 +118,7 @@ def get_tags_of_markdown_files(docs_path):
         tags = [ii.replace("  - ", "") for ii in re.findall(r"  - \w\S*", text)]
         taglist.extend(tags)
 
-    print(taglist)
+    # print(taglist)
     return taglist
 
 
@@ -70,19 +139,35 @@ if __name__ == "__main__":
     feature_files_path = sys.argv[1]
     docs_path = sys.argv[2]
 
-    print(sys.argv[3])
+    # print(sys.argv[3])
 
-    if len(sys.argv) > 2:
+    # if len(sys.argv) > 2:
+    try:
         exclude_tags = json.loads(sys.argv[3])
-    else:
+    except:
         exclude_tags = []
 
-    print(exclude_tags)
+    allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"] + exclude_tags
+
+    # print(exclude_tags)
 
     # Build a list of all URS_IDs in the features files
-    features = build_feature_files(feature_files_path)
-    feature_tags = construct_non_generic_tag_list(features, exclude_tags)
-    print(f"The following URS IDs were found in the .feature files: {feature_tags}")
+    features, locations = build_feature_files(feature_files_path)
+
+    # Ensure all features have IDs
+    ensure_id(features, allowlist)
+
+    # Ensure IV
+    ensure_tag_coverage(features)
+
+    # Ensure every URS feature has at least one scenario
+    ensure_urs_scenarios(features)
+
+    # Ensure rationale for @ReviewByException
+    ensure_review_by_exception_rationale(features, locations)
+
+    feature_tags = construct_non_generic_tag_list(features, allowlist)
+    # print(f"The following URS IDs were found in the .feature files: {feature_tags}")
 
     # Check for duplicates in the URS_IDs
     unique = check_uniqueness_of_requirements(feature_tags)
@@ -92,7 +177,7 @@ if __name__ == "__main__":
 
     # Build a list of all the tags used in the design
     docs_tags = get_tags_of_markdown_files(docs_path)
-    print(f"The following URS IDs are referenced in the documentation: {docs_tags}")
+    # print(f"The following URS IDs are referenced in the documentation: {docs_tags}")
 
     # Verify that all urs_ids have references to design - i.e. all urs_ids need to be in design tags
     in_ds, check_list = check_mention_of_tags_in_ds(docs_tags, feature_tags)
