@@ -174,12 +174,18 @@ stages:
               COMMIT_HASH: $(Build.SourceVersion)
             displayName: Generate verification report as HTML
 
+          - bash: echo "##vso[task.setvariable variable=verification_report_file]$(${{ parameters.get_verification_report_name_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html"
+            displayName: Generate verification report filename
+
           - script: |
               PURPLE='\033[0;35m' # Purple
               NC='\033[0m'        # No Color
 
               cp ${{ parameters.verification_report_template_location }} ${{ variables.verification_report_name }}
-              echo -e "${PURPLE}VERIFICATION_REPORT_FILENAME:${NC} ${{ variables.verification_report_name }}"
+              ls -la
+              cat ${{ variables.verification_report_name }}
+              echo -e "${PURPLE}VERIFICATION_REPORT_NAME:${NC} ${{ variables.verification_report_name }}"
+              echo -e "${PURPLE}VERIFICATION_REPORT_FILE:${NC} ${{ variables.verification_report_file }}"
             displayName: Assign name and other metadata to verification report file
 
           - publish: ${{ variables.verification_report_name }}
