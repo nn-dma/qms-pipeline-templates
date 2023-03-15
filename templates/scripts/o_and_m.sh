@@ -24,7 +24,7 @@ done
 
 echo $instScript_files
 
-echo "list of Installation Scripts need to be executed: ${instScript_files[@]}"
+echo "list of operation files need to be verified: ${instScript_files[@]}"
 
 if [[ " ${instScript[*]} " =~ " true " ]]; then
     echo "instScript=true"
