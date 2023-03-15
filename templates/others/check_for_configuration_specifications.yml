@@ -18,13 +18,18 @@ stages:
       - job: installation_script_check
         steps:
           - checkout: self
+            fetchDepth: 0
           - checkout: ${{parameters.template_repo}}
 
           - script: |
-              ls
+
               chmod 777 ${{variables.check_install_script_location}}
-              ${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}
-              instScript=$(${{variables.check_install_script_location}} $(Build.Repository.Name)/${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
+
+              echo "hello"
+              ${{variables.check_install_script_location}} ${{parameters.script_path}}
+              echo "hello"
+
+              instScript=$(${{variables.check_install_script_location}} ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
               echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               echo "Release has Installation Script changes: $instScript"
             name: scripts
