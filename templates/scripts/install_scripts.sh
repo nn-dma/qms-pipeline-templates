@@ -30,6 +30,6 @@ if [[ " ${instScript[*]} " =~ " true " ]]; then
     echo "instScript=true"
 fi
 
-if [[ ! " ${instScript[*]} " =~ " true " ]]; then
+if [[ ! " ${instScript[*]} " =~ " false " ]]; then
     echo "instScript=false"
 fi
