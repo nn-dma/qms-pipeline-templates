@@ -23,15 +23,10 @@ stages:
 
           - script: |
 
-              chmod +x ${{variables.check_install_script_location}}
-
-              echo "hello"
-              # ${{variables.check_install_script_location}} ${{parameters.script_path}}
-              echo "hello"
               cd $(Build.Repository.Name)
-              SCRIPT_PATH=$(dirname $(readlink -e ${{variables.check_install_script_location}}))
-
-              instScript=$($SCRIPT_PATH/install_scripts.sh ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
+              SCRIPT_PATH=$(dirname $(readlink -e ${{variables.check_install_script_location}}))/install_scripts.sh
+              chmod +x $SCRIPT_PATH
+              instScript=$($SCRIPT_PATH ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
               echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               echo "Release has Installation Script changes: $instScript"
             name: scripts
