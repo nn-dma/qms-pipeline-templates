@@ -2,7 +2,11 @@ import sys
 import glob
 import re
 import json
-from behave.runner_util import parse_features, collect_feature_locations
+
+from behave.runner_util import (
+    parse_features,
+    collect_feature_locations,
+)
 from behave.configuration import Configuration
 
 
@@ -11,6 +15,7 @@ def build_feature_files(feature_files_path):
     # Parse features
     config = Configuration(feature_files_path)
     locations = collect_feature_locations(config.paths)
+
     features = parse_features(locations)
 
     return features, locations
@@ -74,17 +79,38 @@ def ensure_review_by_exception_rationale(features, locations):
     for location, feature in zip(locations, features):
 
         # Get nr of scenarios tagged with ReviewByException
-        nr_exceptions = len([tag for scenario in feature.scenarios for tag in scenario.tags if tag == "ReviewByException"])
+        nr_exceptions = len(
+            [
+                tag
+                for scenario in feature.scenarios
+                for tag in scenario.tags
+                if tag == "ReviewByException"
+            ]
+        )
 
         if nr_exceptions > 0:
 
-            # Regex to capture comment block between tags and Scenario 
             f = open(location.filename, "r")
             text = f.read()
 
-            rationale = re.findall(r".*@ReviewByException.*\n(?:\s+#.*\n)+\s+Scenario:", text)
-            assert nr_exceptions == len(rationale), "Every ReviewByException needs a rationale"
+            # Regex to capture comment block between tags and Scenario
+            rationale = re.findall(
+                r".*@ReviewByException.*\n(?:\s*#.*\n)+\s*Scenario:", text
+            )
+            assert nr_exceptions == len(
+                rationale
+            ), "Every ReviewByException needs a rationale"
     print("All ReviewByException scenarios have rationales")
+
+
+def ensure_step_implementations(features):
+
+    """
+    This is probably not feasible, as we need to actually load the step implementation,
+    which means we would need to inherit transitive dependencies of the consuming project.
+    """
+    pass
+
 
 def construct_non_generic_tag_list(features, allowlist):
 
