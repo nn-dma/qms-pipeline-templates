@@ -4,6 +4,9 @@ parameters:
 
   - name: environment
     type: string
+  - name: dependsOn
+    type: object
+    default: []
 # Description:
 
 # Purpose:

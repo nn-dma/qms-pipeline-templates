@@ -5,6 +5,9 @@ parameters:
     type: string
   - name: feature_files_path
     type: string
+  - name: dependsOn
+    type: object
+    default: []
 
 # Description:
 
@@ -13,7 +16,7 @@ parameters:
 
 stages:
   - stage: ${{ parameters.stage_name }}
-    dependsOn: []
+    dependsOn: ${{ parameters.dependsOn }}
     variables:
       script_location: qms-pipeline-templates/templates/scripts/manual_iv.py
       dependency_location: qms-pipeline-templates/templates/scripts
