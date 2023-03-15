@@ -18,6 +18,7 @@ stages:
       - job: installation_script_check
         steps:
           - checkout: self
+            fetchDepth: 0
           - checkout: ${{parameters.template_repo}}
 
           - script: |
