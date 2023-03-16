@@ -23,6 +23,7 @@ stages:
       - job: check_manualPV_job
         steps:
           - checkout: self
+            fetchDepth: 0
           - checkout: ${{parameters.template_repo}}
         
           - script: |

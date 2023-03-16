@@ -43,6 +43,7 @@ stages:
                 echo $manual_tag_files
                 echo "##vso[task.setvariable variable=status;isOutput=true]true"
               else
+                echo "manual IV tags not found"
                 echo "##vso[task.setvariable variable=status;isOutput=true]false"
               fi
             name: manualIV
