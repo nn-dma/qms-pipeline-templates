@@ -29,9 +29,21 @@ stages:
             workingDirectory: $(System.DefaultWorkingDirectory)
 
           - script: |
-              curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sh
-              curl -LJO https://github.com/aws-cloudformation/aws-guard-rules-registry
+              assets=($(ls -d cdk.out/asset.*))
+              zip -r veracode.zip cdk.out/assets[1]
             displayName: Setup environment
+
+          - task: Veracode@3
+            inputs:
+              ConnectionDetailsSelection: 'Service Connection'
+              AnalysisService: 'veracode-jzts'
+              veracodeAppProfile: '$(system.teamProject)'
+              version: '$(build.buildNumber)'
+              filepath: 'veracode.zip'
+              importResults: true
+              failBuildOnPolicyFail: true
+              maximumWaitTime: '360'
+
 
           - script: |
               pwd
