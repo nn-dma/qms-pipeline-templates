@@ -43,6 +43,7 @@ stages:
               filepath: 'veracode.zip'
               importResults: true
               failBuildOnPolicyFail: true
+              failBuildIfUploadAndScanBuildStepFails: true
               maximumWaitTime: '360'
 
 
