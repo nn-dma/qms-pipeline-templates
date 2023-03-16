@@ -37,7 +37,7 @@ stages:
             displayName: Setup environment
 
           - script: |
-              manual_tag_files==find $(Build.Repository.Name)/${{ parameters.feature_files_path }} -name "*.feature" -print0 | xargs -0 grep -Hv "#" | grep "@IV" | grep "@manual"
+              manual_tag_files=`find $(Build.Repository.Name)/${{ parameters.feature_files_path }} -name "*.feature" -print0 | xargs -0 grep -Hv "#" | grep "@IV" | grep "@manual"`
               if [ ! -z "$manual_tag_files" ]; then
                 echo "manual IV tags found in these files: "
                 echo $manual_tag_files
