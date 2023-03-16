@@ -31,7 +31,7 @@ stages:
           - script: |
               assets=($(ls -d cdk.out/asset.*))
               echo $assets
-              zip -r veracode.zip cdk.out/$assets[1]
+              zip -r veracode.zip $assets
             displayName: Setup environment
 
           - task: Veracode@3
