@@ -10,37 +10,27 @@ parameters:
     default: []
 # Description:
 
-# This will check for any "@manualPV" tags and pause the pipeline to perform manual PV
+# This will check for any "@manual @PV" tags and pause the pipeline to perform manual PV
 
 
 stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
     variables:
-      script_location: qms-pipeline-templates/templates/scripts/manual_pv.py
+      script_location: ../qms-pipeline-templates/templates/scripts/manual_pv.sh
       dependency_location: qms-pipeline-templates/templates/scripts
     jobs:
       - job: check_manualPV_job
-        # environment: "check_manualPV_job"
-        # TODO: Run with poetry
         steps:
           - checkout: self
           - checkout: ${{parameters.template_repo}}
-
+        
           - script: |
-              cp ${{ variables.dependency_location }}/poetry.lock .
-              cp ${{ variables.dependency_location }}/pyproject.toml .
-
-              curl -sSL https://install.python-poetry.org | python -
-              poetry install
-            displayName: Setup environment
-
-          - script: |
-              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }}
-              if [ $? -eq 100 ]; then
-                echo "##vso[task.setvariable variable=status;isOutput=true]true"
-              else
-                echo "##vso[task.setvariable variable=status;isOutput=true]false"
-              fi
+              cd $(Build.Repository.Name)
+              SCRIPT_PATH=$(dirname $(readlink -e ${{variables.script_location}}))/manual_pv.sh
+              chmod +x $SCRIPT_PATH
+              instScript=$($SCRIPT_PATH ${{parameters.feature_files_path}}  | grep "instScript" | cut -d'=' -f 2)
+              echo "##vso[task.setVariable variable=status;isOutput=true]$instScript"
+              echo "Release has manual PV changes: $instScript"
             name: manualPV
             displayName: Check for manual PV
