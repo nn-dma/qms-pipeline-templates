@@ -12,7 +12,7 @@ stages:
   - stage: ${{parameters.stage_name}}
     dependsOn: []
     variables:
-      script_location: qms-pipeline-templates/templates/scripts/o_and_m.sh
+      script_location: ../qms-pipeline-templates/templates/scripts/o_and_m.sh
     jobs:
       - job: o_and_m_check
         steps:
