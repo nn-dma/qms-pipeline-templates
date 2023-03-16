@@ -28,10 +28,27 @@ stages:
             displayName: Restore caches
             workingDirectory: $(System.DefaultWorkingDirectory)
 
+          # - script: |
+          #     assets=($(ls -d cdk.out/asset.*))
+          #     echo $assets
+          #     zip -r veracode.zip $assets
+          #   displayName: Setup environment
+
+          # - task: Veracode@3
+          #   inputs:
+          #     ConnectionDetailsSelection: 'Service Connection'
+          #     AnalysisService: 'Veracode'
+          #     veracodeAppProfile: '$(system.teamProject)'
+          #     version: '$(build.buildNumber)'
+          #     filepath: 'veracode.zip'
+          #     importResults: true
+          #     failBuildOnPolicyFail: true
+          #     failBuildIfUploadAndScanBuildStepFails: true
+          #     maximumWaitTime: '360'
+
+
           - script: |
-              assets=($(ls -d cdk.out/asset.*))
-              echo $assets
-              zip -r veracode.zip $assets
+              zip -r veracode2.zip cdk.out
             displayName: Setup environment
 
           - task: Veracode@3
@@ -39,14 +56,12 @@ stages:
               ConnectionDetailsSelection: 'Service Connection'
               AnalysisService: 'Veracode'
               veracodeAppProfile: '$(system.teamProject)'
-              version: '$(build.buildNumber)'
-              filepath: 'veracode.zip'
+              version: '$(build.buildNumber)2'
+              filepath: 'veracode2.zip'
               importResults: true
               failBuildOnPolicyFail: true
               failBuildIfUploadAndScanBuildStepFails: true
               maximumWaitTime: '360'
-
-
           - script: |
               pwd
               ls
