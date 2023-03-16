@@ -17,7 +17,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
-    condition: and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_manual_iv_stage_name }}.check_manualIV_job.outputs['manualIV.status'], 'true'))
+    condition: and(and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_manual_iv_stage_name }}.outputs['check_manualIV_job.manualIV.status'], 'true')), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - deployment: Execute_Manual_IV
