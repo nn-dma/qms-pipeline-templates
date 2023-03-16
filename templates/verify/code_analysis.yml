@@ -37,7 +37,7 @@ stages:
           - task: Veracode@3
             inputs:
               ConnectionDetailsSelection: 'Service Connection'
-              AnalysisService: 'veracode-jzts'
+              AnalysisService: 'Veracode'
               veracodeAppProfile: '$(system.teamProject)'
               version: '$(build.buildNumber)'
               filepath: 'veracode.zip'
