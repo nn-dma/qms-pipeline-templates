@@ -92,7 +92,6 @@ stages:
               echo "branch:"
               echo "origin/release/$(Build.SourceBranchName)"
 
-              ls -la
               echo "template_repo:"
               echo ${{ parameters.template_repo }}
               cd qms-pipeline-templates
@@ -169,7 +168,6 @@ stages:
               echo -e "================> ${PURPLE}Rendering pipeline run artifacts link${NC}"
               sed -i 's|<var>ARTIFACTS_ADO_PIPELINE_LINK</var>|$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)\&view=artifacts\&pathAsName=false\&type=publishedArtifacts|g' ${{ parameters.verification_report_template_location }}
 
-              ls -la
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               COMMIT_HASH: $(Build.SourceVersion)
@@ -183,7 +181,6 @@ stages:
               NC='\033[0m'        # No Color
 
               cp ${{ parameters.verification_report_template_location }} $(verification_report_file)
-              ls -la
               echo -e "${PURPLE}VERIFICATION_REPORT_FILE:${NC} $(verification_report_file)"
             displayName: Assign name and other metadata to verification report file
 
