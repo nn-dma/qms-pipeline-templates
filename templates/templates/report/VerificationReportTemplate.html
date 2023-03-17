@@ -111,9 +111,8 @@
                     <li>Conclusion: Concludes on verification activities and whether the IT solution is fit for intended use and ready to be released for <var>IS_READY_FOR</var>.</li>
                     <li>Requirements: Lists all requirements in scope for the release.</li>  
                     <li>Design specifications: Lists all design specifications in scope for the release.</li>
-                    <li>Configuration specifications: Lists all configuration specifications introduced in this release.</li>
-                    <li>Verification methods: Describes the methods used for verification including their rationale.</li>
-                    <li>Verification test cases: Lists all verification test cases executed as part of the verification, including results.</li>
+                    <li>Configuration specifications: Lists all configuration specifications added or updated for this release.</li>
+                    <li>Verification test cases: Lists all verification test cases executed as part of the verification, including methods and results.</li>
                 </ul>                
             </article>
         
@@ -166,9 +165,9 @@
             <!-- list features tagged @URS at the time of pull request completion -->
             <article>
                 <h2>Requirements</h2>
-                <p>The following table lists of requirements to the IT solution, including:
+                <p>The following table lists all requirements to the IT solution, including:
                     <ul>
-                        <li>The unique requirement id</li>
+                        <li>The unique requirement ID</li>
                         <li>The descriptive title of the requirement</li>
                         <li>The current version of the requirement</li> 
                         <li>The timestamp of the last modification of the requirement</li>
@@ -198,7 +197,7 @@
             <!-- list markdown files in the dedicated configuration folder at the time of pull request completion -->
             <article>
                 <h2>Configuration specifications</h2>
-                <p>The following table lists all configuration specifications for the current release of the IT solution, including: 
+                <p>The following table lists all configuration specifications that have been added or updated for the current release of the IT solution, including: 
                     <ul>
                         <li>The name and location of the configuration specification</li>
                         <li>The current version of the configuration specification</li> 
@@ -221,8 +220,8 @@
                 5. that it passed
             -->
             <article>
-                <h2>Verification test cases and results</h2>
-                <p>The following table lists all verification test cases and corresponding results, including:</p>
+                <h2>Verification test cases</h2>
+                <p>The following table lists all verification test cases executed as part of the verification, including:</p>
                 <ul>
                     <li>Test case title</li>
                     <li>Verification method, which can be either of:
@@ -234,7 +233,7 @@
                             <li>"Review by Exception": When using this verification method, the rationale will be stated explicitly for each 
                                 test case in the table.</li>
                         </ul></li>
-                    <li>Executed by: This will state "Pipeline" for all automatic test cases (as these are executed by our automated release
+                    <li>Executed by: This will state "Pipeline" for all automatic test cases (as these are executed by the automated release
                         pipeline), and Novo Nordisk initials for manual test cases. 
                         For test cases using the "Review by Exception" method, the column will state "N/A" as these test cases have not been
                         executed as part of the verification process.</li>
@@ -246,7 +245,7 @@
                         as part of the verification process. Notice that due to the nature of the release pipeline, the verication report 
                         will only be generated if all test cases (except those with verification method "Review by Exception") 
                         have exected successfully.</li>
-                    <li>Trace to requirement: This will states which requirements are covered by the test case (traceability)</li>
+                    <li>Trace to requirement: This will state which requirements are covered by the test case (traceability)</li>
                 </ul> 
 
                 <div style="width: 100%; text-align: left;">
