@@ -30,8 +30,14 @@ stages:
               cd $(Build.Repository.Name)
               SCRIPT_PATH=$(dirname $(readlink -e ${{variables.script_location}}))/manual_pv.sh
               chmod +x $SCRIPT_PATH
-              instScript=$($SCRIPT_PATH ${{parameters.feature_files_path}}  | grep "instScript" | cut -d'=' -f 2)
-              echo "##vso[task.setVariable variable=status;isOutput=true]$instScript"
-              echo "Release has manual PV changes: $instScript"
+              manual_tag_files=$($SCRIPT_PATH ${{parameters.feature_files_path}}
+              if [ ! -z "$manual_tag_files" ]; then
+                echo "manual PV tags found in these files: "
+                echo $manual_tag_files
+                echo "##vso[task.setvariable variable=status;isOutput=true]true"
+              else
+                echo "No new manual PV tags found!"
+                echo "##vso[task.setvariable variable=status;isOutput=true]false"
+              fi
             name: manualPV
             displayName: Check for manual PV

@@ -2,8 +2,6 @@
 
 files=$(find $1 -name "*.feature")
 
-echo $files
-
 git gc --force --quiet
 
 instScript=false
@@ -19,13 +17,7 @@ for i in ${files[@]}; do
     fi
 done
 
-echo $instScript_files
-
-echo "list of files with new manual PV tags: ${instScript_files[@]}"
-
 if [ "$instScript" = true ] ; then
-    echo "instScript=true"
-else
-    echo "instScript=false"
+    echo "list of files with new manual PV tags: ${instScript_files[@]}"
 fi
 
