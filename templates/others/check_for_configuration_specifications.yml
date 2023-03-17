@@ -22,11 +22,42 @@ stages:
           - checkout: ${{parameters.template_repo}}
 
           - script: |
+              files=$(ls ${{parameters.script_path}}/*)
 
-              cd $(Build.Repository.Name)
-              SCRIPT_PATH=$(dirname $(readlink -e ${{variables.check_install_script_location}}))/install_scripts.sh
-              chmod +x $SCRIPT_PATH
-              instScript=$($SCRIPT_PATH ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
-              echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
-              echo "Release has Installation Script changes: $instScript"
-            name: scripts
+              git gc --force --quiet
+
+              instScript=false
+              instScript_files=()
+
+              sha_id=$(git rev-list -n 1 $(git describe --match "*#released" --abbrev=0 --tags $(git rev-list --tags --max-count=1)))
+
+              for i in ${files[@]}; do
+                  code=$(
+                      git diff --quiet $sha_id HEAD -- $i
+                      echo $?
+                  )
+                  if [ $code == 1 ]; then
+                      instScript=true
+                      instScript_files+=($i)
+                  fi
+              done
+
+              echo "list of Installation Scripts need to be executed: ${instScript_files[@]}"
+
+              if [ "$instScript" = true ] ; then
+                  instScript=true
+                  echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
+              else
+                  instScript=false
+                  echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
+              fi
+
+          # - script: |
+
+          #     cd $(Build.Repository.Name)
+          #     SCRIPT_PATH=$(dirname $(readlink -e ${{variables.check_install_script_location}}))/install_scripts.sh
+          #     chmod +x $SCRIPT_PATH
+          #     instScript=$($SCRIPT_PATH ${{parameters.script_path}}  | grep "instScript" | cut -d'=' -f 2)
+          #     echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
+          #     echo "Release has Installation Script changes: $instScript"
+          #   name: scripts
