@@ -17,7 +17,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
-    condition: and(and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_o_and_m_stage_name }}.outputs['o_and_m_check.scripts.instScript'], 'true')), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    condition: and(and(not(or(failed(), canceled())), eq(dependencies.${{ parameters.check_for_o_and_m_stage_name }}.outputs['o_and_m_check.scripts.status'], 'true')), contains(variables['Build.SourceBranch'], 'refs/heads/release/'))
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - deployment: Check_Operations_Docs
