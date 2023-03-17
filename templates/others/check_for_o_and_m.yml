@@ -24,7 +24,7 @@ stages:
               cd $(Build.Repository.Name)
               SCRIPT_PATH=$(dirname $(readlink -e ${{variables.script_location}}))/o_and_m.sh
               chmod +x $SCRIPT_PATH
-              o_and_m_files=$($SCRIPT_PATH ${{parameters.operations_path}}
+              o_and_m_files=$($SCRIPT_PATH ${{parameters.operations_path}})
               if [ ! -z "$o_and_m_files" ]; then
                 echo "$o_and_m_files"
                 echo "##vso[task.setvariable variable=status;isOutput=true]true"
