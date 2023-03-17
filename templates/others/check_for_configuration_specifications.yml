@@ -45,12 +45,14 @@ stages:
                   fi
               done
 
-              echo "list of Installation Scripts need to be executed: ${instScript_files[@]}"
 
               if [ "$instScript" = true ] ; then
+                  echo "list of Installation Scripts need to be executed: ${instScript_files[@]}"
                   instScript=true
                   echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               else
+                  echo "No new files found in ${{parameters.script_path}}/ since last release"
+
                   instScript=false
                   echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               fi
