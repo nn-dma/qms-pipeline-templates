@@ -13,7 +13,8 @@ parameters:
   render_replace_py_location: "qms-pipeline-templates/templates/scripts/report/render_replace.py"
   render_requirements_py_location: "qms-pipeline-templates/templates/scripts/report/render_requirements.py"
   get_pull_request_id_py_location: "qms-pipeline-templates/templates/scripts/report/get_pull_request_id.py"
-  get_verification_report_name_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_name_for_context.sh"
+  get_verification_report_filename_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_filename_for_context.sh"
+  get_verification_report_artifact_name_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_artifact_name_for_context.sh"
   test_results_artifact_name: ""
   test_results_format: "behave-allure"
   ready_for: ""
@@ -173,8 +174,11 @@ stages:
               COMMIT_HASH: $(Build.SourceVersion)
             displayName: Generate verification report as HTML
 
-          - bash: echo "##vso[task.setvariable variable=verification_report_file]$(${{ parameters.get_verification_report_name_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html"
+          - bash: echo "##vso[task.setvariable variable=verification_report_file]$(${{ parameters.get_verification_report_filename_for_context_sh_location }} "${{ parameters.environment_name }}" "$(Build.BuildId)" "${{ parameters.ready_for }}").html"
             displayName: Generate verification report filename
+
+          - bash: echo "##vso[task.setvariable variable=verification_report_artifact]$(${{ parameters.get_verification_report_artifact_name_for_context_sh_location }} "${{ parameters.ready_for }}")"
+            displayName: Generate verification report artifact name
 
           - script: |
               PURPLE='\033[0;35m' # Purple
@@ -185,7 +189,7 @@ stages:
             displayName: Assign name and other metadata to verification report file
 
           - publish: $(verification_report_file)
-            artifact: verification_report_${{ parameters.ready_for }}
+            artifact: $(verification_report_artifact)
             displayName: Publish verification report as build artifact
 
           

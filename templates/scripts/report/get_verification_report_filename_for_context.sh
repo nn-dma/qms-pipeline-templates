@@ -6,11 +6,14 @@
 # arg2: Build ID
 # arg3: Ready for [use|production]
 #
+# Note that "production" in this context means that the verification report indicates readyness to deploy to the production environment.
+# Likewise, "use" in this context means that the verification report indicates readyness to release what is deployed to the production environment for use.
+#
 # Example usage:
-# ./get_verification_report_name_for_context.sh "ramone-service1-val-eu-central1" "617829" "use"
-#    > VerificationReport_validation_617829_ramone_service1_val_eu_central1
-# ./get_verification_report_name_for_context.sh "ramone-service1-val-eu-central1" "617829" "production"
+# ./get_verification_report_filename_for_context.sh "ramone-service1-val-eu-central1" "617829" "use"
 #    > VerificationReport_production_617829_ramone_service1_val_eu_central1
+# ./get_verification_report_filename_for_context.sh "ramone-service1-val-eu-central1" "617829" "production"
+#    > VerificationReport_validation_617829_ramone_service1_val_eu_central1
 
 
 #################
@@ -21,13 +24,13 @@
 generate_verification_report_name () {
     # Determine execution context
     if [ "$READY_FOR" == "production" ]; then
-        # Context: Generated for production environment
-        # Generate the name of the verification report for artifact in production
-        vrn=VerificationReport_production_${BUILD_ID}_${ENVIRONMENT_NAME}
-    elif [ "$READY_FOR" == "use" ]; then
         # Context: Generated for validation environment
         # Generate the name of the verification report for artifact in validation
         vrn=VerificationReport_validation_${BUILD_ID}_${ENVIRONMENT_NAME}
+    elif [ "$READY_FOR" == "use" ]; then
+        # Context: Generated for production environment
+        # Generate the name of the verification report for artifact in production
+        vrn=VerificationReport_production_${BUILD_ID}_${ENVIRONMENT_NAME}
     else
         # Nothing could be determined, so exit with error
         vrn=""
