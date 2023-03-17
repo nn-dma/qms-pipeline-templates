@@ -26,7 +26,7 @@ stages:
               chmod +x $SCRIPT_PATH
               o_and_m_files=$($SCRIPT_PATH ${{parameters.operations_path}}
               if [ ! -z "$o_and_m_files" ]; then
-                echo $o_and_m_files
+                echo "$o_and_m_files"
                 echo "##vso[task.setvariable variable=status;isOutput=true]true"
               else
                 echo "No new changes to O&M docs!"
