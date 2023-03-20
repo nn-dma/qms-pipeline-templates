@@ -4,7 +4,7 @@ import glob
 from datetime import datetime
 
 class Testresult:
-    def __init__(self, name, status, start, stop, uuid, historyId, fullName, labels, statusDetails =None, steps =None):
+    def __init__(self, name, status, start, stop, uuid, historyId, fullName, labels, statusDetails =None, steps =None, stage =None, attachments =None, parameters =None, links =None):
         self.name = name
         self.status = status
         self.statusdetails = statusDetails
