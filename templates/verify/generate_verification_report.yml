@@ -85,6 +85,9 @@ stages:
               echo "current directory:"
               pwd
 
+              echo "installing poetry (1.4.1)"
+              pip install poetry==1.4.1
+
               echo "copying poetry files to root"
               cp ${{ variables.dependency_location }}/poetry.lock .
               cp ${{ variables.dependency_location }}/pyproject.toml .
