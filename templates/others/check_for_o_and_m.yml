@@ -33,3 +33,4 @@ stages:
                 echo "##vso[task.setvariable variable=status;isOutput=true]false"
               fi
             name: scripts
+            displayName: Check for O&M Changes
