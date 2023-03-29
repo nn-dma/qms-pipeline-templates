@@ -100,6 +100,7 @@
     <main class="container-fluid">
         <div class="content">
             <article>
+                <h2>Introduction</h2>
                 This is the verification report for <kbd><var>IT_SOLUTION_NAME</var></kbd> release <kbd><a href="<var>ADO_PIPELINE_RUN_LINK</var>"><var>PIPELINE_RUN_ID</var></a></kbd> in the <kbd><var>ENVIRONMENT</var></kbd> environment.<p>
 
                 The release is anchored in IT change <kbd><var>CHANGE_ITEM</var></kbd> in Azure DevOps, project <kbd><var>ADO_PROJECT_NAME</var></kbd>.<p>
@@ -147,9 +148,9 @@
                         is fit for intended use and ready to be released for <var>IS_READY_FOR</var></b>.<p>
                         <p> The conclusion is based on:
                         <ul>
-                            <li>All verification activities were succesfully executed and no issues were found.</li>
+                            <li>All verification activities were successfully executed, and no issues were found.</li>
                             <li>Regression testing was performed by re-executing all previously defined automated test cases, and all such test cases passed.</li>
-                            <li>Based on all test cases passing (both for regression testing and for verification of current release) and the performed peer review of documentation, test code, and pipeline definition, the performed verification is assessed to be sufficient.</li>
+                            <li>Based on all test cases passing (both for regression testing and for verification of current release) and the performed peer review of documentation, code, and pipeline definitions, the performed verification is assessed to be sufficient.</li>
                             <li>Requirements that only have test cases using verification method “Review by exception” are concluded not to have been verified. All other requirements are concluded to have been verified.</li>
                         </p>
                     </div>
@@ -229,7 +230,9 @@
                             <li>"Automatic": The rationale for choosing this verification method is to facilitate continuous testing 
                                 in all environments.</li>
                             <li>"Manual": The rationale for choosing this verification method is, that the preferred method, "Automatic", 
-                                is not feasible, e.g. when design documentation review is the only way to verify a requirement.</li>
+                                is not feasible, e.g. when design documentation review is the only way to verify a requirement. 
+                                Notice that if any manual test cases are defined for the IT solution, the release pipeline will stop and wait for acknowledgement 
+                                from a tester that the test cases have been successfully executed.</li>
                             <li>"Review by Exception": When using this verification method, the rationale will be stated explicitly for each 
                                 test case in the table.</li>
                         </ul></li>
@@ -242,7 +245,7 @@
                         the verification process.</li>
                     <li>Conclusion: This will state "Passed" for all test cases that have been successfully executed. For test cases using the 
                         verification method  "Review by Exception" method, the column will state "N/A" as these test cases have not been executed 
-                        as part of the verification process. Notice that due to the nature of the release pipeline, the verication report 
+                        as part of the verification process. Notice that due to the nature of the release pipeline, the verification report 
                         will only be generated if all test cases (except those with verification method "Review by Exception") 
                         have exected successfully.</li>
                     <li>Trace to requirement: This will state which requirements are covered by the test case (traceability)</li>
