@@ -1,0 +1,6 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = git@ssh.dev.azure.com:v3/novonordiskit/Data%20Management%20and%20Analytics/qms-pipeline-templates

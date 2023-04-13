@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+006712d328fd3673ec62b8e2f9f0fd8f030d7b10 refs/heads/fix/traceability-improvements
+99f01a1eb0ace254e49640f738f8df756e6b60b5 refs/heads/main
+adf6b0df02a12ed5e40cdbe2d284d29ae645c98e refs/heads/verbose-output
+afeb991fc8f3a8ba21cc9fe1d6e853858ec02bd1 refs/tags/v0.0.1
+8f1d9d1c662aef098f595f7ee45542c8c554f09c refs/tags/v0.0.2
+7b177e4825029983c069c97778ed4fe68b4eee55 refs/tags/v0.0.3
+^22002e0132b327ce8d41a4918c9acf95f056bd7a
