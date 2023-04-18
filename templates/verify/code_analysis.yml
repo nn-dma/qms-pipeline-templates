@@ -24,7 +24,8 @@ stages:
           - checkout: none
 
           - script: |
-              cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
+              echo "This step is currently not enabled."
+              #cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
             displayName: Restore caches
             workingDirectory: $(System.DefaultWorkingDirectory)
 
@@ -69,6 +70,6 @@ stages:
               Run CFN-GUARD
               # cfn-guard validate --data cdk.out --rules /${INPUT_RULE_SET_NAME}.guard --show-summary fail -p
 
-          - publish: $(System.DefaultWorkingDirectory)/cdk.out
-            artifact: cdk.out
-            displayName: publish cdk.out
+          # - publish: $(System.DefaultWorkingDirectory)/cdk.out
+          #   artifact: cdk.out
+          #   displayName: publish cdk.out
