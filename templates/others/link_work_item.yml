@@ -25,6 +25,9 @@ stages:
           - checkout: ${{ parameters.template_repo }}
 
           - script: |
+              echo "installing poetry (1.4.1)"
+              pip install poetry==1.4.1
+
               cp ${{ variables.dependency_location }}/poetry.lock .
               cp ${{ variables.dependency_location }}/pyproject.toml .
               poetry install
