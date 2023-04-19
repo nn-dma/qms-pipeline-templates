@@ -21,39 +21,6 @@ class Testresult:
     def from_object(cls, json_object):
         return cls(**json_object)
 
-#     # TODO: Add exception handling
-#     def __repr__(self):
-#         # Prepare values for rendering
-#         time_elapsed = (
-#             datetime.fromtimestamp(self.stop/1000.0) - 
-#             datetime.fromtimestamp(self.start/1000.0)
-#             ).total_seconds() # Time elapsed in seconds for test to execute
-#         time_executed = datetime.fromtimestamp(self.start/1000.0).strftime('%Y-%m-%d %H:%M:%S') # Time test was executed
-#         # Extract tags and features from labels list (TODO: This needs to be refactored into input in a future interface)
-#         tags = [x['value'] for x in self.labels if x['name'] == 'tag']
-#         features = [x['value'] for x in self.labels if x['name'] == 'feature']
-        
-#         # Create rendering
-#         return f'''<div class="testsuiteresult { self.status }">
-#     <h6>{ self.name }</h6>
-#     <ul>
-#         <li>Status: { self.status }</li>
-#     </ul>
-#     <ul>
-#         <li>Feature:</li>
-#         { '<kbd>' + '</kbd><kbd>'.join(features) + '</kbd>' if features else '' }
-#     </ul>
-#     <ul>
-#         <li>Tags:</li>
-#         { '<kbd>' + '</kbd><kbd>'.join(tags) + '</kbd>' if tags else '' }
-#     </ul>
-#     <ul>
-#         <li>Test executed: { time_executed }</li>
-#         <li>Executed by: Pipeline</li>
-#         <li>Duration: { time_elapsed }s</li>
-#     </ul>
-# </div>'''
-
     # TODO: Add exception handling
     def __repr__(self):
         # Prepare values for rendering
