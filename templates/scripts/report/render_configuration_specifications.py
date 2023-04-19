@@ -15,6 +15,9 @@ def extract_configuration_specification_tags(lines):
             #   - service_now_integration
             if '- ' in line:
                 tags.append(line.split('- ')[1].strip())
+            if '---' in line: # This marks the end of a tag section, so do not process the rest of the file.
+                # ---
+                break
     #print(tags)
     return tags
 
