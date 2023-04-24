@@ -13,6 +13,7 @@ parameters:
   render_replace_py_location: "qms-pipeline-templates/templates/scripts/report/render_replace.py"
   render_requirements_py_location: "qms-pipeline-templates/templates/scripts/report/render_requirements.py"
   get_pull_request_id_py_location: "qms-pipeline-templates/templates/scripts/report/get_pull_request_id.py"
+  extract_requirements_name_to_id_mapping_py_location: "qms-pipeline-templates/templates/scripts/report/extract_requirements_name_to_id_mapping.py"
   get_verification_report_filename_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_filename_for_context.sh"
   get_verification_report_artifact_name_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_artifact_name_for_context.sh"
   test_results_artifact_name: ""
@@ -77,6 +78,9 @@ stages:
               echo -e "${PURPLE}render_replace_py_location:${NC} ${{ parameters.render_replace_py_location }}"
               echo -e "${PURPLE}render_requirements_py_location:${NC} ${{ parameters.render_requirements_py_location }}"
               echo -e "${PURPLE}get_pull_request_id_py_location:${NC} ${{ parameters.get_pull_request_id_py_location }}"
+              echo -e "${PURPLE}extract_requirements_name_to_id_mapping_py_location:${NC} ${{ parameters.extract_requirements_name_to_id_mapping_py_location }}"
+              echo -e "${PURPLE}get_verification_report_filename_for_context_sh_location:${NC} ${{ parameters.get_verification_report_filename_for_context_sh_location }}"
+              echo -e "${PURPLE}get_verification_report_artifact_name_for_context_sh_location:${NC} ${{ parameters.get_verification_report_artifact_name_for_context_sh_location }}"
               echo -e "${PURPLE}test_results_artifact_name:${NC} ${{ parameters.test_results_artifact_name }}"
               echo -e "${PURPLE}test_results_format:${NC} ${{ parameters.test_results_format }}"
               echo -e "${PURPLE}ready_for:${NC} ${{ parameters.ready_for }}"
@@ -128,6 +132,9 @@ stages:
               cat workItemsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>WORK_ITEM_LINKS</var>"
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<kbd><var>CHANGE_ITEM</var></kbd>"
+
+              echo -e "================> ${PURPLE}Extracting and mapping feature names with unique tags${NC}"
+              poetry run python ${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }}
 
               echo -e "================> ${PURPLE}Extracting and rendering test results${NC}"
               poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }} > testResultsHtml.html
