@@ -137,8 +137,8 @@ stages:
               cd $(Build.Repository.Name)
 
               echo -e "================> ${PURPLE}Extracting and mapping feature names with unique tags${NC}"
-              poetry run python ${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }} > requirementsNameToIdMapping.dict
-              cat requirementsNameToIdMapping.dict
+              poetry run python ../${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }} > ../requirementsNameToIdMapping.dict
+              cat ../requirementsNameToIdMapping.dict
 
               echo -e "================> ${PURPLE}Extracting and rendering requirements${NC}"
               poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) > listOfRequirementsHtml.html
