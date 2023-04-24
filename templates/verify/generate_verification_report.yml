@@ -138,7 +138,6 @@ stages:
 
               echo -e "================> ${PURPLE}Extracting and mapping feature names with unique tags${NC}"
               poetry run python ../${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }} > ../requirementsNameToIdMapping.dict
-              cat ../requirementsNameToIdMapping.dict
 
               echo -e "================> ${PURPLE}Extracting and rendering requirements${NC}"
               poetry run python ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) > listOfRequirementsHtml.html
@@ -158,7 +157,6 @@ stages:
               echo -e "================> ${PURPLE}Extracting and rendering test results${NC}"
               poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }} -mapping ./requirementsNameToIdMapping.dict > testResultsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
-              cat testResultsHtml.html
 
               echo -e "================> ${PURPLE}Rendering IT solution name${NC}"
               sed -i 's|<var>IT_SOLUTION_NAME</var>|${{ parameters.it_solution_name }}|g' ${{ parameters.verification_report_template_location }}
