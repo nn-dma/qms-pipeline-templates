@@ -33,6 +33,17 @@ class Testresult:
         #tags = [x['value'] for x in self.labels if x['name'] == 'tag']
         features = [x['value'] for x in self.labels if x['name'] == 'feature']
 
+        # Lookup all features' unique tag from feature name in the mapping dictionary (depends on provided output from 'extract_requirements_name_to_id_mapping.py')
+        features_tags = []
+        try:
+            for feature in features:
+                # Append the feature tag to the list only if not empty
+                feature_tag = mapping[feature]
+                if feature_tag != '':
+                    features_tags.append(feature_tag)
+        except (KeyError):
+            pass
+
         # Create rendering
         return f'''            <tr>
                 <th scope="row">{self.count}</th>
@@ -41,7 +52,7 @@ class Testresult:
                 <td>Pipeline</td>
                 <td>{time_executed}</td>
                 <td class="{self.status}">{self.status}</td>
-                <td>{'<kbd>' + '</kbd><kbd>'.join(features) + '</kbd>' if features else ''}</td>
+                <td>{'<kbd>' + '</kbd><kbd>'.join(features_tags) + '</kbd>' if features_tags else ''}</td>
             </tr>'''
 
 def render_header():
@@ -67,6 +78,7 @@ def render_footer():
 
 # TODO: Add exception handling
 def main(argv):
+    # METHOD 1: DEPRECATED (2023-04-24) - TO BE REMOVED
     # 1. Check for the arg pattern:
     #   python3 render_json_test_result.py -file <filepath>
     #   e.g. args[0] is '-file' and args[1] is './results/cf0355e3-be5f-4d57-b103-fc751059b394-result.json'
@@ -79,9 +91,16 @@ def main(argv):
             print(testresult)
 
     # 2. Check for the arg pattern:
-    #   python3 render_json_test_result.py -folder <folderpath>
-    #   e.g. args[0] is '-folder' and args[1] is './results'
-    if len(argv) == 2 and argv[0] == '-folder':
+    #   python3 render_json_test_result.py -folder <folderpath> -mapping <mappingfilepath>
+    #   e.g. args[0] is '-folder' and args[1] is './results' and args[2] is '-mapping' and args[3] is './mapping.dict'
+    if len(argv) == 4 and argv[0] == '-folder' and argv[2] == '-mapping':
+        # Set the mapping dictionary with the contents of the provided mapping file
+        with open(argv[3], mode='r', encoding='utf-8') as file_reader:
+            # Define a globally accessible mapping dictionary (key: feature name, value: feature tags)
+            global mapping
+            mapping = eval(file_reader.read())
+            file_reader.close()
+
         # Find all test result json files in the folder and subfolders
         path = r'%s/**/*-result.json' % argv[1]
         files = glob.glob(path, recursive=True)

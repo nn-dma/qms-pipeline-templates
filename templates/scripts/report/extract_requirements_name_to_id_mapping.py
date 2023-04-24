@@ -82,7 +82,7 @@ def main(argv):
 
         # Create a mapping for each unqiue feature id to the feature description
         for i, file in enumerate(files):
-            print(file)
+            #print(file)
             with open(file, mode='r', encoding='utf-8') as file_reader:
                 lines = file_reader.read().split('\n')
                 features = extract_features(lines)
@@ -91,12 +91,15 @@ def main(argv):
                     mapping[feature.name] = feature.tags
 
         # Print the mapping
-        print(mapping)
+        #print(mapping)
 
-        # Write the mapping script to a file
-        with open('requirements_id_mapping_lookup.py', mode='w', encoding='utf-8') as file_writer:
-            file_writer.write(TEMPLATE.replace('{mapping}', str(mapping)))
-            file_writer.close()
+        # # Write the mapping script to a file
+        # with open('requirements_id_mapping_lookup.py', mode='w', encoding='utf-8') as file_writer:
+        #     file_writer.write(TEMPLATE.replace('{mapping}', str(mapping)))
+        #     file_writer.close()
+
+        # Emit the mappings as stdout
+        print(str(mapping))
 
 
 if __name__ == "__main__":
