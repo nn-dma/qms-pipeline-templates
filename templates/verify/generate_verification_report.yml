@@ -134,10 +134,10 @@ stages:
               poetry run python ${{ parameters.render_replace_py_location }} -render ./workItemsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<kbd><var>CHANGE_ITEM</var></kbd>"
 
               echo -e "================> ${PURPLE}Extracting and mapping feature names with unique tags${NC}"
-              poetry run python ${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }}
+              poetry run python ${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }} > requirementsNameToIdMapping.dict
 
               echo -e "================> ${PURPLE}Extracting and rendering test results${NC}"
-              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }} > testResultsHtml.html
+              poetry run python ${{ parameters.render_json_test_result_py_location }} -folder $(Pipeline.Workspace)/${{ parameters.test_results_artifact_name }} -mapping ./requirementsNameToIdMapping.dict > testResultsHtml.html
               poetry run python ${{ parameters.render_replace_py_location }} -render ./testResultsHtml.html -template ${{ parameters.verification_report_template_location }} -placeholder "<var>TESTCASE_RESULTS</var>"
 
               echo -e "================> ${PURPLE}Entering folder '$(Build.Repository.Name)' for correct script execution context${NC}"
