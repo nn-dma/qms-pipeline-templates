@@ -64,10 +64,12 @@ def ensure_urs_scenarios(features):
     for feature in features:
         if "URS" in feature.tags:
             assert len(feature.scenarios) > 0, "URS features must have test cases"
-            for scenario in feature.scenarios:
-                assert (
-                    "PV" in scenario.tags
-                ), f"URS features must have test cases. {feature} does not"
+            tagged_pv = [
+                scenario.tags for scenario in feature.scenarios if "PV" in scenario.tags
+            ]
+            assert (
+                len(tagged_pv) > 0
+            ), "URS features must have at least one test case tagged with PV"
 
     print("URS features have test cases")
 
