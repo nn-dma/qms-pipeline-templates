@@ -1,5 +1,6 @@
 import json
 import requests
+import datetime
 import re
 import sys
 import os
@@ -175,6 +176,15 @@ def get_pull_request_closed_timestamp(response, commit_hash):
     pull_request_closed_timestamp = pull_request["closedDate"]
     return pull_request_closed_timestamp
 
+def format_pull_request_timestamp(dt_string: str) -> str:
+    # Remove precision
+    dt_string = dt_string.split(".")[0]
+    # Convert to datetime object
+    dt_object = datetime.strptime(dt_string, '%Y-%m-%dT%H:%M:%S')
+    # Rormat datetime object as string
+    formatted_string = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+    # Print the formatted string
+    return formatted_string
 
 # TODO: Add exception handling
 def main(argv):
@@ -230,7 +240,7 @@ def main(argv):
         if result == "pull_request_id":
             print(pull_request_id)
         elif result == "pull_request_closed_timestamp":
-            print(pull_request_closed_timestamp)
+            print(format_pull_request_timestamp(pull_request_closed_timestamp))
         elif result == "work_items":
             [
                 get_work_items_link(
