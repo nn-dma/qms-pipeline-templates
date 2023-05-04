@@ -181,7 +181,7 @@ def format_pull_request_timestamp(dt_string: str) -> str:
     dt_string = dt_string.split(".")[0]
     # Convert to datetime object
     dt_object = datetime.strptime(dt_string, '%Y-%m-%dT%H:%M:%S')
-    # Rormat datetime object as string
+    # Format datetime object as string
     formatted_string = dt_object.strftime('%Y-%m-%d %H:%M:%S')
     # Print the formatted string
     return formatted_string
