@@ -1,5 +1,6 @@
 import json
 import requests
+import base64
 from datetime import datetime
 import re
 import sys
@@ -178,12 +179,12 @@ def get_pull_request_closed_timestamp(response, commit_hash):
 
 def format_pull_request_timestamp(dt_string: str) -> str:
     # Remove precision
+    # NOTE: This is done because Python .strptime supports 6 digit precision on datetime strings, but the one we get from Azure DevOps has 7 digits
     dt_string = dt_string.split(".")[0]
     # Convert to datetime object
     dt_object = datetime.strptime(dt_string, '%Y-%m-%dT%H:%M:%S')
     # Format datetime object as string
     formatted_string = dt_object.strftime('%Y-%m-%d %H:%M:%S')
-    # Print the formatted string
     return formatted_string
 
 # TODO: Add exception handling
@@ -227,10 +228,16 @@ def main(argv):
         if access_token == "USE_ENV_VARIABLE":
             access_token = os.environ["SYSTEM_ACCESSTOKEN"]
             auth_method = "Bearer"
+        # If auth method is "Basic", we are most likely running outside Azure DevOps, so we need to encode the 
+        # access token as password in a Basic HTTP Auth header format
+        if auth_method == "Basic":
+            # Base64 encode userid:password, which is empty (no user id) and the access_token value in a string "<user_id>:<access_token>", e.g. ":dkjhsDhjksd289712984Fdjhksd".
+            access_token = base64.b64encode(f":{access_token}".encode()).decode()
 
         response = get_pull_request(
             commit_hash, auth_method, access_token, organization, project, repository
         )
+        
         pull_request_id = get_pull_request_id(response, commit_hash)
         work_items = get_work_items(response, commit_hash)
         pull_request_closed_timestamp = get_pull_request_closed_timestamp(
