@@ -18,7 +18,9 @@ def extract_design_specification_tags(lines):
             if '---' in line: # This marks the end of a tag section, so do not process the rest of the file.
                 # ---
                 break
-    #print(tags)
+    # If no tags were found, then add 'N/A' as a tag to indicate that no tags were found.
+    if not tags:
+        tags.append('N/A')
     return tags
 
 def extract_last_modified_commit_hash(filepath, branch):
