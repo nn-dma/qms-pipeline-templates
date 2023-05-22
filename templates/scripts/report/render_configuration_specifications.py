@@ -18,9 +18,6 @@ def extract_configuration_specification_tags(lines):
             if '---' in line: # This marks the end of a tag section, so do not process the rest of the file.
                 # ---
                 break
-    # If no tags were found, then add 'N/A' as a tag to indicate that no tags were found.
-    if not tags:
-        tags.append('N/A')
     return tags
 
 def extract_last_modified_commit_hash(filepath, branch):
@@ -108,7 +105,7 @@ def main(argv):
                 <td><a href="{repository_file_link}" target="_blank">{repository_file_path}</a></td>
                 <td>{last_modified_commit_hash}</td>
                 <td>{last_modified_commit_hash_timestamp}</td>
-                <td>{ '<kbd>' + '</kbd><kbd>'.join(configuration_specification_tags) + '</kbd>' if configuration_specification_tags else '' }</td>
+                <td>{ '<kbd>' + '</kbd><kbd>'.join(configuration_specification_tags) + '</kbd>' if configuration_specification_tags else 'N/A' }</td>
             </tr>''')
 
         # Render the table body close elements
