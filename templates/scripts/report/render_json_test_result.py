@@ -30,8 +30,13 @@ class Testresult:
             ).total_seconds() # Time elapsed in seconds for test to execute
         time_executed = datetime.fromtimestamp(self.start/1000.0).strftime('%Y-%m-%d %H:%M:%S') # Time test was executed
         # Extract tags and features from labels list (TODO: This needs to be refactored into input in a future interface)
-        #tags = [x['value'] for x in self.labels if x['name'] == 'tag']
+        tags = [x['value'] for x in self.labels if x['name'] == 'tag']
         features = [x['value'] for x in self.labels if x['name'] == 'feature']
+
+        na_tag = ''
+        for tag in tags:
+            if tag == 'IV' or tag == 'pIV':
+                na_tag = 'N/A'
 
         # Lookup all features' unique tag from feature name in the mapping dictionary (depends on provided output from 'extract_requirements_name_to_id_mapping.py')
         features_tags = []
@@ -52,7 +57,7 @@ class Testresult:
                 <td>Pipeline</td>
                 <td>{time_executed}</td>
                 <td class="{self.status}">{self.status}</td>
-                <td>{'<kbd>' + '</kbd><kbd>'.join(features_tags) + '</kbd>' if features_tags else ''}</td>
+                <td>{'<kbd>' + '</kbd><kbd>'.join(features_tags) + '</kbd>' if features_tags else ''.join(na_tag)}</td>
             </tr>'''
 
 def render_header():
