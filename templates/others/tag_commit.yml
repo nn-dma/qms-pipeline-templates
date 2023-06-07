@@ -1,6 +1,8 @@
 parameters:
   - name: stage_name
     type: string
+  - name: condition
+    type: string
   - name: repository
     type: string
   - name: build_tag
@@ -14,7 +16,7 @@ parameters:
 # Expected output:
 stages:
   - stage: ${{ parameters.stage_name}}
-    condition: not(or(failed(), canceled()))
+    condition: ${{ parameters.condition }}    
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - job: Build_Number_Tag
