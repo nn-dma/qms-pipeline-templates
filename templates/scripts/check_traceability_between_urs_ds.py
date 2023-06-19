@@ -2,6 +2,7 @@ import sys
 import glob
 import re
 import json
+from typing import List, Tuple
 
 from behave.runner_util import (
     parse_features,
@@ -125,14 +126,31 @@ def construct_non_generic_tag_list(features, allowlist):
 
     return non_classification_tags
 
+def check_uniqueness_of_requirements(tags: List[str]) -> Tuple[bool, List[str]]:
+    """
+    Check that all tags are unique, e.g. no duplicates. 
+    Returns True=all tags are unique, False=one or more tags are duplicates. 
+    If duplicates are found a list of the duplicates is returned. Otherwise an empty list is returned.
+    """
+    tag_frequency_dict = {}
+    for tag in tags:
+        if tag in tag_frequency_dict:
+            tag_frequency_dict[tag] += 1
+        else:
+            tag_frequency_dict[tag] = 1
 
-def check_uniqueness_of_requirements(tags):
+    duplicates = [tag for tag, count in tag_frequency_dict.items() if count > 1]
 
-    # Check if the length is the same
-    if len(tags) == len(set(tags)):
-        return True
-    else:
-        return False
+    return len(duplicates) == 0, duplicates
+
+# DEPRECATED (2023-06-19)
+# def check_uniqueness_of_requirements(tags):
+
+#     # Check if the length is the same
+#     if len(tags) == len(set(tags)):
+#         return True
+#     else:
+#         return False
 
 
 def get_tags_of_markdown_files(docs_path):
@@ -198,10 +216,11 @@ if __name__ == "__main__":
     # print(f"The following URS IDs were found in the .feature files: {feature_tags}")
 
     # Check for duplicates in the URS_IDs
-    unique = check_uniqueness_of_requirements(feature_tags)
+    is_unique, duplicates = check_uniqueness_of_requirements(feature_tags)
+    print(f"Are all URS tags unique? {is_unique}")  # This will print False if there are duplicates
 
-    if not unique:
-        raise Exception("Duplicates in identifiers")
+    if not is_unique:
+        raise Exception(f"Duplicates in URS identifiers: {duplicates}")
 
     # Build a list of all the tags used in the design
     docs_tags = get_tags_of_markdown_files(docs_path)
