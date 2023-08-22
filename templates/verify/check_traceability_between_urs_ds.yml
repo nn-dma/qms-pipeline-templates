@@ -29,8 +29,6 @@ stages:
           - script: |
               cp ${{ variables.dependency_location }}/poetry.lock .
               cp ${{ variables.dependency_location }}/pyproject.toml .
-
-              curl -sSL https://install.python-poetry.org | python -
               poetry install
             displayName: Setup environment
 

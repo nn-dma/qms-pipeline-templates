@@ -1,6 +1,6 @@
 parameters:
   - name: stage_name
-    type: string  
+    type: string
   - name: template_repo
     type: string
   - name: feature_files_path
@@ -31,9 +31,8 @@ stages:
           - script: |
               cp ${{ variables.dependency_location }}/poetry.lock .
               cp ${{ variables.dependency_location }}/pyproject.toml .
-
-              curl -sSL https://install.python-poetry.org | python -
               poetry install
+
             displayName: Setup environment
 
           - script: |
