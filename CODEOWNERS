@@ -1,4 +1,4 @@
 # Verification report
-/templates/scripts/report/* @LLZJ
-/templates/templates/report/* @LLZJ
-/templates/verify/generate_verification_report.yml @LLZJ
+/templates/scripts/report/* @LLZJ_nngithub
+/templates/templates/report/* @LLZJ_nngithub
+/templates/verify/generate_verification_report.yml @LLZJ_nngithub
