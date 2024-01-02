@@ -23,17 +23,9 @@ stages:
     jobs:
       - job: check_manualIV_job
         # environment: "check_manualIV_job"
-        # TODO: Run with poetry
         steps:
           - checkout: self
           - checkout: ${{parameters.template_repo}}
-
-          - script: |
-              cp ${{ variables.dependency_location }}/poetry.lock .
-              cp ${{ variables.dependency_location }}/pyproject.toml .
-              poetry install
-
-            displayName: Setup environment
 
           - script: |
               manual_tag_files=`find $(Build.Repository.Name)/${{ parameters.feature_files_path }} -name "*.feature" -print0 | xargs -0 grep -Hv "#" | grep "@IV" | grep "@manual"`

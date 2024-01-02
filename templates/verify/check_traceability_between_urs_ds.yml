@@ -20,19 +20,16 @@ stages:
       dependency_location: qms-pipeline-templates/templates/scripts
     jobs:
       - job: Check_Traceability_between_URS_DS_job
+        strategy:
+          matrix:
+            Python310:
+              python.version: '3.10'
         # environment: "check_traceability_between_urs_ds"
-        # TODO: Run with poetry
         steps:
           - checkout: self
           - checkout: ${{parameters.template_repo}}
 
           - script: |
-              cp ${{ variables.dependency_location }}/poetry.lock .
-              cp ${{ variables.dependency_location }}/pyproject.toml .
-              poetry install
-            displayName: Setup environment
-
-          - script: |
               set -e
-              poetry run python ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} ${{ parameters.exclude_tags }}
+              python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} ${{ parameters.exclude_tags }}
             displayName: Check traceability between URS and DS
