@@ -23,7 +23,7 @@ stages:
         strategy:
           matrix:
             Python310:
-              python.version: '3.10'
+              python.version: '3.8'
         # environment: "check_traceability_between_urs_ds"
         steps:
           - checkout: self
