@@ -32,8 +32,7 @@ stages:
           - script: |
               set -e
               sudo apt-get install python3-pip
-              python3 -m ensurepip --upgrade
-              pip3 install requests_aws4auth
-              pip3 install -r requirements.txt
+              python3 -m pip install -r requirements.txt
+              python3 -m pip install -r requests_aws4auth
               python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} ${{ parameters.exclude_tags }}
             displayName: Check traceability between URS and DS
