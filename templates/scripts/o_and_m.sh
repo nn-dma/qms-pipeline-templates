@@ -7,7 +7,15 @@ git gc --force --quiet
 instScript=()
 instScript_files=()
 
-sha_id=$(git rev-list -n 1 $(git describe --match "*#released" --abbrev=0 --tags $(git rev-list --tags --max-count=1)))
+# sha_id=$(git rev-list -n 1 $(git describe --match "*#released" --abbrev=0 --tags $(git rev-list --tags --max-count=1)))
+sha_id=""
+for tag in $(git tag --sort=-creatordate); do
+  if [[ $tag == *#released* ]]; then
+    echo "Released tag: $tag"
+    sha_id=$(git rev-list -n 1 $tag)
+    break
+  fi
+done
 
 for i in ${files[@]}; do
     code=$(
@@ -16,11 +24,10 @@ for i in ${files[@]}; do
     )
     if [ $code == 1 ]; then
         instScript='true'
-        instScript_files+=($i)
+        instScript_files+=("$i\n")
     fi
 done
 
 if [ "$instScript" = true ] ; then
-    echo "list of operation files need to be verified: ${instScript_files[@]}"
-
+    echo -e "Please verify the following list of operation files:\n ${instScript_files[@]}"
 fi
