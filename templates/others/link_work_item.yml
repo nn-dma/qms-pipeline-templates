@@ -26,7 +26,6 @@ stages:
 
           - script: |
               python3 -m ensurepip --upgrade
-              pip3 install -r requirements.txt
               python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link
             displayName: Link to work item
             env:
