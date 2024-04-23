@@ -25,6 +25,7 @@ stages:
           - checkout: ${{ parameters.template_repo }}
 
           - script: |
+              cd requirements
               python3 -m ensurepip --upgrade
               pip3 install -r requirements.txt
               python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link
