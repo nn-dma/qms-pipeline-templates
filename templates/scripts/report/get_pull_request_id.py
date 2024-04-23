@@ -100,8 +100,14 @@ def link_work_item(work_item, auth_method, access_token, organization):
             },
         }
     ]
-
+    print("************************************************")
+    print("")
+    print("Work Item:" + work_item)
+    print("")
+    print("Here is the payload used to query the work item:")
+    print("")
     print(payload)
+    print("")
 
     headers = {
         "Content-Type": "application/json-patch+json",
@@ -109,9 +115,15 @@ def link_work_item(work_item, auth_method, access_token, organization):
     }
 
     response = requests.request("PATCH", url, headers=headers, json=payload)
-
+    print("Here is the response from the work item query:")
+    print("")
     print(response.text)
 
+    print("")
+    print("Here is the work item title:")
+    print("")
+    print(response.json()["fields"]["System.Title"])
+    print("")
 
 # TODO: Add exception handling
 def get_pull_request(
