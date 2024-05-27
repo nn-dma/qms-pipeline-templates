@@ -32,5 +32,5 @@ stages:
           - script: |
               set -e
               python3 -m pip install git+https://github.com/behave/behave
-              python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} ${{ parameters.exclude_tags }}
+              python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} '${{ parameters.exclude_tags }}'
             displayName: Check traceability between URS and DS
