@@ -3,6 +3,7 @@ import glob
 import re
 import json
 from typing import List, Tuple
+from collections import Counter
 
 from behave.runner_util import (
     parse_features,
@@ -132,13 +133,7 @@ def check_uniqueness_of_requirements(tags: List[str]) -> Tuple[bool, List[str]]:
     Returns True=all tags are unique, False=one or more tags are duplicates. 
     If duplicates are found a list of the duplicates is returned. Otherwise an empty list is returned.
     """
-    tag_frequency_dict = {}
-    for tag in tags:
-        if tag in tag_frequency_dict:
-            tag_frequency_dict[tag] += 1
-        else:
-            tag_frequency_dict[tag] = 1
-
+    tag_frequency_dict = Counter(tags)
     duplicates = [tag for tag, count in tag_frequency_dict.items() if count > 1]
 
     return len(duplicates) == 0, duplicates
@@ -185,13 +180,15 @@ if __name__ == "__main__":
     feature_files_path = sys.argv[1]
     docs_path = sys.argv[2]
 
-    # print(sys.argv[3])
+    #print(sys.argv[3])
 
     # if len(sys.argv) > 2:
     try:
         exclude_tags = json.loads(sys.argv[3])
     except:
         exclude_tags = []
+
+    #print("exclude_tags", exclude_tags)
 
     allowlist = ["URS", "GxP", "non-GxP", "CA", "IV"] + exclude_tags
 
