@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 files=$(find $1 -name "*.feature")
 
