@@ -5,6 +5,7 @@ from datetime import datetime
 import re
 import sys
 import os
+from pprint import pprint
 
 # EXAMPLE RESPONSE:
 
@@ -107,22 +108,18 @@ def link_work_item(work_item, auth_method, access_token, organization):
     print("Here is the payload used to query the work item:")
     print("")
     print(payload)
-    print("")
 
     headers = {
         "Content-Type": "application/json-patch+json",
         "Authorization": f"{auth_method} {access_token}",
     }
 
-    response = requests.request("PATCH", url, headers=headers, json=payload)
+    response = requests.request("GET", url, headers=headers, json=payload)
+    print("")
     print("Here is the response from the work item query:")
     print("")
-    print(response.text)
-
+    pprint(response.json())
     print("")
-    print("Here is the work item title:")
-    print("")
-    print(response.json()["fields"]["System.Title"])
     print("")
 
 # TODO: Add exception handling
@@ -132,7 +129,6 @@ def get_pull_request(
     # Replace with the right organization id, project id and repository id
     # url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
     url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repository}/pullrequestquery?api-version=7.0"
-
     payload = json.dumps(
         {"queries": [{"items": [f"{commit_hash}"], "type": "lastMergeCommit"}]}
     )
@@ -143,8 +139,8 @@ def get_pull_request(
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    pullRequestId = response.json()["results"][0][commit_hash][0]["pullRequestId"]
     return response.text
-
 
 def get_work_items_link(
     commit_hash, auth_method, access_token, organization, project, repository, work_item
@@ -160,26 +156,37 @@ def get_work_items_link(
 
     response = requests.request("GET", url, headers=headers)
     r = json.loads(response.text, strict=False)
+    #print(r["_links"]["self"])
     work_item_list.append(r["_links"]["html"]["href"])
-
+    return response.text
 
 # TODO: Add exception handling
 def get_pull_request_id(response, commit_hash):
     r = json.loads(response, strict=False)
     pull_request = r["results"][0][commit_hash][0]
-    # url = pull_request['url']
     mergeCommitMessage = pull_request["completionOptions"]["mergeCommitMessage"]
-    # workItem = re.search("132", mergeCommitMessage).group()
-    pull_request_id = pull_request["pullRequestId"]
-    return pull_request_id
+    pullRequestId = pull_request["pullRequestId"]
+    return pullRequestId
 
 
-def get_work_items(response, commit_hash):
-    r = json.loads(response, strict=False)
-    pull_request = r["results"][0][commit_hash][0]
-    mergeCommitMessage = pull_request["completionOptions"]["mergeCommitMessage"]
-    workItems = re.findall(r"#(\d+)", mergeCommitMessage)
-    return workItems
+def get_work_items(response, auth_method, access_token, commit_hash, organization, project, repository, pullRequestId):
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"{auth_method} {access_token}",
+    }
+
+    payload = json.dumps(
+        {"queries": [{"items": [f"{commit_hash}"], "type": "lastMergeCommit"}]}
+    )
+
+    url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repository}/pullRequests/{pullRequestId}/workitems?api-version=7.0"
+    response = requests.request("GET", url, headers=headers, data=payload)
+    workItem=[]
+    print(response.json())
+    for wi in response.json()["value"]:
+        workItem.append(wi["id"])
+    return workItem
 
 
 # TODO: Add exception handling
@@ -251,7 +258,7 @@ def main(argv):
         )
         
         pull_request_id = get_pull_request_id(response, commit_hash)
-        work_items = get_work_items(response, commit_hash)
+        work_items = get_work_items(response, auth_method, access_token, commit_hash, organization, project, repository, pull_request_id)
         pull_request_closed_timestamp = get_pull_request_closed_timestamp(
             response, commit_hash
         )
