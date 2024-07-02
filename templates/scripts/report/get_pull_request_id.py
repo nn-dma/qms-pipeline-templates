@@ -138,11 +138,10 @@ def get_pull_request(
     return response.text
 
 def get_work_item_with_it_change_tag(
-    commit_hash, auth_method, access_token, organization, project, repository, work_items, verbose = False 
+    commit_hash, auth_method, access_token, organization, project, repository, work_items
 ):
     # Replace with the right organization id, project id and work item id
     # url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
-
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"{auth_method} {access_token}",
@@ -155,6 +154,9 @@ def get_work_item_with_it_change_tag(
         r = json.loads(response.text, strict=False)
         if ("System.Tags" in r["fields"].keys()) and ("IT Change" in r["fields"]["System.Tags"]):
             tagged_work_item_list.append(r["_links"]["html"]["href"])
+    return tagged_work_item_list
+
+def work_item_sanity_check(tagged_work_item_list, verbose = False):
     if len(tagged_work_item_list) > 1:
         print("There are more than one work item with IT Change tag. Exiting with failure.") if verbose else None
         sys.exit(1)
@@ -163,8 +165,6 @@ def get_work_item_with_it_change_tag(
         sys.exit(1)
     else:
         print(f"Work item with IT Change tag found: {tagged_work_item_list[0]}") if verbose else None
-
-    return tagged_work_item_list
 
 # TODO: Add exception handling
 def get_pull_request_id(response, commit_hash):
@@ -266,7 +266,7 @@ def main(argv):
         pull_request_closed_timestamp = get_pull_request_closed_timestamp(
             response, commit_hash
         )
-        tagged_work_item = get_work_item_with_it_change_tag(commit_hash, auth_method, access_token, organization, project, repository, work_items, verbose = False)
+        tagged_work_item = get_work_item_with_it_change_tag(commit_hash, auth_method, access_token, organization, project, repository, work_items)
 
         if result == "pull_request_id":
             print(pull_request_id)
@@ -280,9 +280,8 @@ def main(argv):
                     f"<kbd><a href=\"{tagged_work_item[0]}\">{tagged_work_item[0].rsplit('/',1)[1]}</a></kbd>"
                 )
         elif result == "work_item_with_tag":
-            tagged_work_item = get_work_item_with_it_change_tag(commit_hash, auth_method, access_token, organization, project, repository, work_items, verbose = True)
+            work_item_sanity_check(tagged_work_item, verbose = True)
         elif result == "work_item_list":
-
             [
                 link_work_item(
                     work_item_id,
