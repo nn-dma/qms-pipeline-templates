@@ -26,7 +26,6 @@ stages:
 
           - script: |
               set -e
-              python3 -m ensurepip --upgrade
               echo "Fetching all work items attached to PR"
               echo ""
               script_return=$(python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result work_item_list)
