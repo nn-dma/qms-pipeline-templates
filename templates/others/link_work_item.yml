@@ -32,7 +32,7 @@ stages:
               echo "$script_return"
               echo ""
               echo "Fetching the work item tagged with IT Change"
-              script_return=$(python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result work_item_with_tag)
+              python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result work_item_with_tag
               echo "$script_return" 
               echo ""
             displayName: Link to work item
