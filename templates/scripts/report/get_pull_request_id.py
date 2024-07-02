@@ -138,10 +138,39 @@ def get_pull_request(
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    pullRequestId = response.json()["results"][0][commit_hash][0]["pullRequestId"]
     return response.text
 
-def get_work_items_link(
+def get_work_item_with_it_change_tag(
+    commit_hash, auth_method, access_token, organization, project, repository, work_items
+):
+    # Replace with the right organization id, project id and work item id
+    # url = "https://dev.azure.com/novonordiskit/Data%20Management%20and%20Analytics/_apis/git/repositories/QMS-TEMPLATE/pullrequestquery?api-version=7.0"
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"{auth_method} {access_token}",
+    }
+
+    for work_item in work_items:
+        url = f"https://dev.azure.com/{organization}/{project}/_apis/wit/workitems/{work_item}?api-version=7.0"
+
+        response = requests.request("GET", url, headers=headers)
+        r = json.loads(response.text, strict=False)
+        if ("System.Tags" in r["fields"].keys()) and ("IT Change" in r["fields"]["System.Tags"]):
+            work_item_list.append(r["_links"]["html"]["href"])
+
+    if len(work_item_list) > 1:
+        print("There are more than one work item with IT Change tag. Exiting with failure.")
+        sys.exit(1)
+    elif len(work_item_list) == 0:
+        print("No work item with IT Change tag found. Exiting with failure.")
+        sys.exit(1)
+    else:
+        print(f"Work item with IT Change tag found: {work_item_list[0]}")
+
+    return response.text
+
+def get_work_item_link(
     commit_hash, auth_method, access_token, organization, project, repository, work_item
 ):
     # Replace with the right organization id, project id and work item id
@@ -163,6 +192,8 @@ def get_work_items_link(
     elif len(work_item_list) == 0:
         print("No work item with IT Change tag found. Exiting with failure.")
         sys.exit(1)
+    else:
+        print(f"Work item with IT Change tag found: {work_item_list[0]}")
     return response.text
 
 # TODO: Add exception handling
@@ -260,7 +291,6 @@ def main(argv):
         response = get_pull_request(
             commit_hash, auth_method, access_token, organization, project, repository
         )
-        
         pull_request_id = get_pull_request_id(response, commit_hash)
         work_items = get_work_items(response, auth_method, access_token, commit_hash, organization, project, repository, pull_request_id)
         pull_request_closed_timestamp = get_pull_request_closed_timestamp(
@@ -271,9 +301,11 @@ def main(argv):
             print(pull_request_id)
         elif result == "pull_request_closed_timestamp":
             print(format_pull_request_timestamp(pull_request_closed_timestamp))
+        elif result == "work_item_with_tag":
+            get_work_item_with_it_change_tag(commit_hash, auth_method, access_token, organization, project, repository, work_items)
         elif result == "work_items":
             [
-                get_work_items_link(
+                get_work_item_(
                     commit_hash,
                     auth_method,
                     access_token,
