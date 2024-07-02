@@ -26,7 +26,13 @@ stages:
 
           - script: |
               python3 -m ensurepip --upgrade
-              python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result add_work_item_link
+              echo "Fetching all work items attached to PR"
+              echo ""
+              python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result work_item_list
+              echo ""
+              echo "Fetching the work item tagged with IT Change"
+              echo ""
+              python3 templates/scripts/report/get_pull_request_id.py -commit $COMMIT_HASH -accesstoken USE_ENV_VARIABLE -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -result work_item_with_tag
             displayName: Link to work item
             env:
               COMMIT_HASH: $(Build.SourceVersion)
