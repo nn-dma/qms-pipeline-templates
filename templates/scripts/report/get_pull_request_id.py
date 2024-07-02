@@ -157,6 +157,12 @@ def get_work_items_link(
     r = json.loads(response.text, strict=False)
     if ("System.Tags" in r["fields"].keys()) and ("IT Change" in r["fields"]["System.Tags"]):
         work_item_list.append(r["_links"]["html"]["href"])
+    if len(work_item_list) > 1:
+        print("There are more than one work item with IT Change tag. Exiting with failure.")
+        sys.exit(1)
+    elif len(work_item_list) == 0:
+        print("No work item with IT Change tag found. Exiting with failure.")
+        sys.exit(1)
     return response.text
 
 # TODO: Add exception handling
@@ -182,7 +188,6 @@ def get_work_items(response, auth_method, access_token, commit_hash, organizatio
     url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repository}/pullRequests/{pullRequestId}/workitems?api-version=7.0"
     response = requests.request("GET", url, headers=headers, data=payload)
     workItem=[]
-    print(response.json())
     for wi in response.json()["value"]:
         workItem.append(wi["id"])
     return workItem
