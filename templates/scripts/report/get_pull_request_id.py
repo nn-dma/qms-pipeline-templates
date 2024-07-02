@@ -120,7 +120,6 @@ def link_work_item(work_item, auth_method, access_token, organization):
     print("")
     pprint(response.json())
     print("")
-    print("")
 
 # TODO: Add exception handling
 def get_pull_request(
@@ -156,8 +155,8 @@ def get_work_items_link(
 
     response = requests.request("GET", url, headers=headers)
     r = json.loads(response.text, strict=False)
-    #print(r["_links"]["self"])
-    work_item_list.append(r["_links"]["html"]["href"])
+    if ("System.Tags" in r["fields"].keys()) and ("IT Change" in r["fields"]["System.Tags"]):
+        work_item_list.append(r["_links"]["html"]["href"])
     return response.text
 
 # TODO: Add exception handling
