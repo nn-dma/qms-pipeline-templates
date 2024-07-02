@@ -80,9 +80,6 @@ from pprint import pprint
 # }'''
 
 
-work_item_list = []
-
-
 def link_work_item(work_item, auth_method, access_token, organization):
 
     url = f"https://dev.azure.com/{organization}/_apis/wit/workitems/{work_item}?api-version=7.0"
@@ -275,16 +272,16 @@ def main(argv):
             print(pull_request_id)
         elif result == "pull_request_closed_timestamp":
             print(format_pull_request_timestamp(pull_request_closed_timestamp))
-        elif result == "work_items":
+        elif result == "work_item_with_tag_link":
             if len(tagged_work_item) == 0:
                 print(f"<kbd>!MISSING!</kbd>")
-            else: 
+            else:
                 print(
                     f"<kbd><a href=\"{tagged_work_item[0]}\">{tagged_work_item[0].rsplit('/',1)[1]}</a></kbd>"
                 )
         elif result == "work_item_with_tag":
             tagged_work_item = get_work_item_with_it_change_tag(commit_hash, auth_method, access_token, organization, project, repository, work_items, verbose = True)
-        elif result == "add_work_item_link":
+        elif result == "work_item_list":
 
             [
                 link_work_item(
