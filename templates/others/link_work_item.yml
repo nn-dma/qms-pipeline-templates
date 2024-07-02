@@ -25,6 +25,7 @@ stages:
           - checkout: ${{ parameters.template_repo }}
 
           - script: |
+              set -e
               python3 -m ensurepip --upgrade
               echo "Fetching all work items attached to PR"
               echo ""
