@@ -22,8 +22,8 @@ stages:
       - job: Check_Traceability_between_URS_DS_job
         strategy:
           matrix:
-            Python310:
-              python.version: '3.8'
+            Python312:
+              python.version: '3.12'
         # environment: "check_traceability_between_urs_ds"
         steps:
           - checkout: self
@@ -31,6 +31,10 @@ stages:
 
           - script: |
               set -e
-              python3 -m pip install git+https://github.com/behave/behave
+              echo
+              pip --version
+              echo
+              wget https://bootstrap.pypa.io/get-pip.py | sudo python3
+              pip3 install behave 
               python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} '${{ parameters.exclude_tags }}'
             displayName: Check traceability between URS and DS
