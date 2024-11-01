@@ -56,7 +56,6 @@ stages:
                   instScript=false
                   echo "##vso[task.setVariable variable=instScript;isOutput=true]$instScript"
               fi
-            name: scripts
 
           # - script: |
 
