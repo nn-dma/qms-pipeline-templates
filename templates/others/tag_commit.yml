@@ -9,6 +9,9 @@ parameters:
     type: string
   - name: dependsOn
     type: object
+  - name: organization_name
+    type: string
+    default: novonordiskit
 # Description:
 
 # Purpose:
@@ -30,6 +33,6 @@ stages:
               git tag -a "${{ parameters.build_tag}}" HEAD -m "ci: Started deployment "
               ado_project=$(sed 's/ /%20/g' <<<"$(System.TeamProject)")
               echo $ado_project
-              git push https://$(System.AccessToken)@novonordiskit.visualstudio.com/$ado_project/_git/${{ parameters.repository}}/ --tags
+              git push https://$(System.AccessToken)@${{ parameters.organization_name }}.visualstudio.com/$ado_project/_git/${{ parameters.repository}}/ --tags
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
