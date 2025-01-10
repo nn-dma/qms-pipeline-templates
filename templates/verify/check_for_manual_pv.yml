@@ -17,7 +17,7 @@ stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
     variables:
-      script_location: ../qms-pipeline-templates/templates/scripts/manual_pv.sh
+      script_location: ../qms-pipeline-templates/templates/scripts
       dependency_location: qms-pipeline-templates/templates/scripts
     jobs:
       - job: check_manualPV_job
@@ -28,7 +28,7 @@ stages:
         
           - script: |
               cd $(Build.Repository.Name)
-              SCRIPT_PATH=$(dirname $(readlink -e ${{variables.script_location}}))/manual_pv.sh
+              SCRIPT_PATH=${{variables.script_location}}/manual_pv.sh
               chmod +x $SCRIPT_PATH
               manual_tag_files=$($SCRIPT_PATH ${{parameters.feature_files_path}})
               if [ ! -z "$manual_tag_files" ]; then
