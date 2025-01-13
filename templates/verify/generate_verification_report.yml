@@ -65,6 +65,14 @@ stages:
           - script: |
 
               python3 -m ensurepip --upgrade
+              echo
+              echo
+              pwd
+              echo
+              echo
+              ls
+              echo
+              echo
               pip3 install -r requirements.txt
               RED='\033[0;31m'    # Red
               GREEN='\033[0;32m'  # Green
