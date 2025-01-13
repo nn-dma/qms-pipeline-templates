@@ -34,7 +34,7 @@ stages:
               echo
               pip --version
               echo
-#              wget https://bootstrap.pypa.io/get-pip.py | sudo python3
+              wget https://bootstrap.pypa.io/get-pip.py | python3
               pip3 install behave 
               echo "python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} '${{ parameters.exclude_tags }}'"
               python3 ${{ variables.script_location }} $(Build.Repository.Name)/${{ parameters.feature_files_path }} $(Build.Repository.Name)/${{ parameters.system_design_path }} '${{ parameters.exclude_tags }}'

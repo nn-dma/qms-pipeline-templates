@@ -63,7 +63,7 @@ stages:
             displayName: Remove HTML folder if it exists
 
           - script: |
-
+              set -e
               python3 -m ensurepip --upgrade
               RED='\033[0;31m'    # Red
               GREEN='\033[0;32m'  # Green
