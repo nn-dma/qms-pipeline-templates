@@ -116,7 +116,6 @@ def get_pull_request_id(response, commit_hash):
     mergeCommitMessage = pull_request["completionOptions"][
         "mergeCommitMessage"
     ]
-    print(mergeCommitMessage)
     pullRequestId = pull_request["pullRequestId"]
     return pullRequestId
 
