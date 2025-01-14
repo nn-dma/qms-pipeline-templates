@@ -64,6 +64,7 @@ stages:
 
           - script: |
               python3 -m ensurepip --upgrade
+              pip3 install requests
               RED='\033[0;31m'    # Red
               GREEN='\033[0;32m'  # Green
               PURPLE='\033[0;35m' # Purple
