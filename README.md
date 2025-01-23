@@ -25,6 +25,7 @@
 2. Merge the PR to main.
 3. Run the ADO pipeline nightly flow or wait for the nightly build to check that
    the changes didn't break the overall flow.
+>NOTE You can perform the subsequent two steps with this [script](https://github.com/nn-dma/qms-pipeline-templates/blob/main/RELEASE_AUTOMATION.md)
 4. Tag the latest commit with the last available tag
 ```
 git tag <your_version>
