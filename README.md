@@ -19,7 +19,7 @@
 1. QMS team reviews the PR.
 2. Merge the PR to main.
 3. Run the ADO pipeline nightly flow or wait for the nightly build to check that
-   the changes didn't impact the newest cli functionality.
+   the changes didn't break the overall flow.
 4. Point to new qms-pipelines templates in cli and bump the version as in this
    [guide](https://github.com/nn-dma/qms-pipeline-templates?tab=readme-ov-file#point-to-latest-qms-pipeline-templates-tag-and-publish-a-new-qms-cli).
 5. Thank the contributor(s) and inform them that their changes are availble at
