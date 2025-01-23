@@ -6,8 +6,13 @@
 2. Change the code and commit to the main of your forked repo.
 3. Edit the main yaml of your QMS flow and edit the GitHub service connection to
    look like this:
-
-![img_1](img/testing_service_connection_1.png)
+```
+- repository: qms_pipeline_templates
+  type: github
+  name: <your_GH_user>/qms-pipeline-templates
+  endpoint: GH_public_service_connection
+  ref: main
+```
 
 4. Rerun your flow and test the code changes fix your issue or implement your
    feature.
