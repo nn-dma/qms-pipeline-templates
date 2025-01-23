@@ -14,7 +14,7 @@
 5. Possible take a couple of screenshots for documenting the change
 6. Create a PR, append evidence and notify the [QMS TEAM](https://docs.qms.novonordisk.cloud/Guides/reference/QMS_team)
 
-# QMS TEAM ZONE - Publishing new version
+## QMS TEAM ZONE - Publishing new version
  
 1. QMS team reviews the PR
 2. Merge the PR to main
