@@ -9,8 +9,8 @@
 
 ![img_1](img/testing_service_connection_1.png)
 
-4. Rerun your flow and test the code chenages fix your issue or implement your
-   feature
+4. Rerun your flow and test the code changes fix your issue or implement your
+   feature.
 5. Possible take a couple of screenshots for documenting the change
 6. Create a PR, append evidence and notify the [QMS TEAM](https://docs.qms.novonordisk.cloud/Guides/reference/QMS_team)
 
@@ -22,3 +22,5 @@
    the changes didn't impact the newest cli functionality
 4. Point to new qms-pipelines templates in cli and bump the version as in this
    [guide](https://github.com/nn-dma/qms-pipeline-templates?tab=readme-ov-file#point-to-latest-qms-pipeline-templates-tag-and-publish-a-new-qms-cli) 
+5. Thank the contributor(s) and inform them that their changes are availble at
+   the latest tag
