@@ -4,7 +4,7 @@
 
 1. Fork this repo. 
 2. Change the code and commit to the main of your forked repo.
-3. Edit the main yaml of your QMS flow and edit the GtHub service connection to
+3. Edit the main yaml of your QMS flow and edit the GitHub service connection to
    look like this:
 
 ![img_1](img/testing_service_connection_1.png)
