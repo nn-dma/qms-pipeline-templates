@@ -25,6 +25,14 @@
 2. Merge the PR to main.
 3. Run the ADO pipeline nightly flow or wait for the nightly build to check that
    the changes didn't break the overall flow.
+4. Tag the latest commit with the last available tag
+```
+git tag <your_version>
+```
+5. Push the tag to origin
+```
+git push origin <your_service>
+```
 4. Point to new qms-pipelines templates in cli and bump the version as in this
    [guide](https://github.com/nn-dma/qms-pipeline-templates?tab=readme-ov-file#point-to-latest-qms-pipeline-templates-tag-and-publish-a-new-qms-cli).
 5. Thank the contributor(s) and inform them that their changes are availble at
