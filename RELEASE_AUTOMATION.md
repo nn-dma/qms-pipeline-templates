@@ -18,8 +18,8 @@ We assume you are running macOS. If not, please amend the sed command in this sc
 The script will ask to confirm the newest tag in the qms-pipeline-templates repo:
  
 ```
-The latest qms-cli tag is v2.0.0-rc1.43. Do you want to push the subsequent tag (y/n)?
-v2.0.0-rc1.43
+The latest qms-cli tag is v0.0.35. Do you want to push the subsequent tag (y/n)?
+v0.0.36
 ```
 
 Answer y, if you are fine with the new tag, otherwise enter n and provide a new
