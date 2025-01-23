@@ -11,7 +11,7 @@
 
 4. Rerun your flow and test the code changes fix your issue or implement your
    feature.
-5. Possible take a couple of screenshots for documenting the change.
+5. Possibly take a couple of screenshots for documenting the change.
 6. Create a PR, append evidence and notify the [QMS TEAM](https://docs.qms.novonordisk.cloud/Guides/reference/QMS_team).
 
 ## QMS TEAM ZONE - Publishing new version
