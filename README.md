@@ -3,7 +3,7 @@
 > NOTE: We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which means [semantic commit messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716). Please adhere to these prefixes. Pull requests must also have a semantic prefix, e.g. 'feat:' or 'fix:'. If you are doing multiple changes at once, you are probably doing too much at once. Opt for smaller but more pull requests.
 
 1. Fork this repo. 
-2. Change the code and commit to the main of your forked repo
+2. Change the code and commit to the main of your forked repo.
 3. Edit the main yaml of your QMS flow and edit the GtHub service connection to
    look like this:
 
@@ -11,8 +11,8 @@
 
 4. Rerun your flow and test the code changes fix your issue or implement your
    feature.
-5. Possible take a couple of screenshots for documenting the change
-6. Create a PR, append evidence and notify the [QMS TEAM](https://docs.qms.novonordisk.cloud/Guides/reference/QMS_team)
+5. Possible take a couple of screenshots for documenting the change.
+6. Create a PR, append evidence and notify the [QMS TEAM](https://docs.qms.novonordisk.cloud/Guides/reference/QMS_team).
 
 ## QMS TEAM ZONE - Publishing new version
  
