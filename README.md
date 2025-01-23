@@ -31,7 +31,7 @@ git tag <your_version>
 ```
 5. Push the tag to origin
 ```
-git push origin <your_service>
+git push origin <your_version>
 ```
 4. Point to new qms-pipelines templates in cli and bump the version as in this
    [guide](https://github.com/nn-dma/qms-pipeline-templates?tab=readme-ov-file#point-to-latest-qms-pipeline-templates-tag-and-publish-a-new-qms-cli).
