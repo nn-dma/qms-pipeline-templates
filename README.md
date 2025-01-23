@@ -3,7 +3,7 @@
 > NOTE: We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which means [semantic commit messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716). Please adhere to these prefixes. Pull requests must also have a semantic prefix, e.g. 'feat:' or 'fix:'. If you are doing multiple changes at once, you are probably doing too much at once. Opt for smaller but more pull requests.
 
 1. Fork this repo. 
-2. Change the code and commit to the main of your forked repo.
+2. Change the code and push to <your_branch>.
 3. Edit the main yaml of your QMS flow and edit the GitHub service connection to
    look like this:
 ```
@@ -11,7 +11,7 @@
   type: github
   name: <your_GH_user>/qms-pipeline-templates
   endpoint: GH_public_service_connection
-  ref: main
+  ref: <your_branch>
 ```
 
 4. Rerun your flow and test the code changes fix your issue or implement your
