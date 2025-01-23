@@ -24,7 +24,6 @@ stages:
           - checkout: none
 
           - script: |
-              echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
               echo "This step is currently not enabled."
               #cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
             displayName: Restore caches
