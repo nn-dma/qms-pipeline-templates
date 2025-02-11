@@ -104,6 +104,8 @@ def get_pull_requests(
 
     if response.status_code == 200:
         pull_requests = response.json().get("value", [])
+        # Remove the origin/ from the branch name
+        branch = branch.replace("origin/", "")
         # Filter for only the ones into the current (release) branch
         pull_requests = [
             pr for pr in pull_requests if pr["targetRefName"] == f"refs/heads/{branch}"
