@@ -113,7 +113,6 @@ def get_pull_requests(
         # TODO: Sort by time? Or maybe just PR ID?
         return pull_requests
     else:
-        print(f"Failed to fetch pull requests: {response.status_code}")
         return []
 
 
@@ -145,7 +144,7 @@ def match_commit_with_pr(
     return None
 
 
-def get_approvers(pr_id: str, pull_requests: list[dict]) -> list[str] | None:
+def get_approvers(pr_id: str, pull_requests: list[dict]) -> list[str]:
     """Get the approvers for a given pull request."""
 
     for pr in pull_requests:
@@ -159,8 +158,7 @@ def get_approvers(pr_id: str, pull_requests: list[dict]) -> list[str] | None:
             ]
             return approvers
     else:
-        print("No approvers found")
-        return None
+        return []
 
 
 def get_approver_roles(approvers: list[str], roles: dict) -> list[str]:
