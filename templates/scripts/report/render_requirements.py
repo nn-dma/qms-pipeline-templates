@@ -322,6 +322,8 @@ def main(argv):
                 lines = lines_raw.split("\n")
                 features = extract_features(lines)
 
+            last_modified_commit_hash = extract_last_modified_commit_hash(file, branch)
+
             pr_id, completion_date = match_commit_with_pr(
                 base_url,
                 auth_method,
