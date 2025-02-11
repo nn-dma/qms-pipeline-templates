@@ -76,6 +76,7 @@ stages:
               echo -e "${PURPLE}environment_name:${NC} ${{ parameters.environment_name }}"
               echo -e "${PURPLE}it_solution_name:${NC} ${{ parameters.it_solution_name }}"
               echo -e "${PURPLE}feature_files_path:${NC} ${{ parameters.feature_files_path }}"
+              echo -e "${PURPLE}roles_file_path:${NC} ${{ parameters.roles_file_path }}"
               echo -e "${PURPLE}system_design_path:${NC} ${{ parameters.system_design_path }}"
               echo -e "${PURPLE}system_configuration_path:${NC} ${{ parameters.system_configuration_path }}"
               echo -e "${PURPLE}verification_report_template_location:${NC} ${{ parameters.verification_report_template_location }}"
