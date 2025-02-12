@@ -13,6 +13,7 @@ parameters:
   render_json_test_result_py_location: "qms-pipeline-templates/templates/scripts/report/render_json_test_result.py"
   render_replace_py_location: "qms-pipeline-templates/templates/scripts/report/render_replace.py"
   render_requirements_py_location: "qms-pipeline-templates/templates/scripts/report/render_requirements.py"
+  render_requirement_content_and_approvers_py_location: "qms-pipeline-templates/templates/scripts/report/render_requirement_content_and_approvers.py"
   get_pull_request_id_py_location: "qms-pipeline-templates/templates/scripts/report/get_pull_request_id.py"
   extract_requirements_name_to_id_mapping_py_location: "qms-pipeline-templates/templates/scripts/report/extract_requirements_name_to_id_mapping.py"
   get_verification_report_filename_for_context_sh_location: "qms-pipeline-templates/templates/scripts/report/get_verification_report_filename_for_context.sh"
@@ -140,8 +141,12 @@ stages:
               python3 ../${{ parameters.extract_requirements_name_to_id_mapping_py_location }} -folder ${{ parameters.feature_files_path }} > ../requirementsNameToIdMapping.dict
 
               echo -e "================> ${PURPLE}Extracting and rendering requirements${NC}"
-              python3 ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -accesstoken USE_ENV_VARIABLE -roles '${{ parameters.roles_file_path}}' > listOfRequirementsHtml.html
+              python3 ../${{ parameters.render_requirements_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) > listOfRequirementsHtml.html
               python3 ../${{ parameters.render_replace_py_location }} -render ./listOfRequirementsHtml.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>LIST_OF_REQUIREMENTS</var>"
+
+              echo -e "================> ${PURPLE}Extracting and rendering requirement contents with approvers${NC}"
+              python3 ../${{ parameters.render_requirement_content_and_approvers_py_location }} -folder ${{ parameters.feature_files_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) -accesstoken USE_ENV_VARIABLE -roles '${{ parameters.roles_file_path}}' > requirementContentsAndApproversHtml.html
+              python3 ../${{ parameters.render_replace_py_location }} -render ./requirementContentsAndApproversHtml.html -template ../${{ parameters.verification_report_template_location }} -placeholder "<var>REQUIREMENT_CONTENTS_AND_APPROVERS</var>"
 
               echo -e "================> ${PURPLE}Extracting and rendering design specifications${NC}"
               python3 ../${{ parameters.render_design_specifications_py_location }} -folder ${{ parameters.system_design_path }} -branch origin/release/$(Build.SourceBranchName) -organization novonordiskit -project '$(System.TeamProject)' -repository $(Build.Repository.Name) > listOfDesignSpecifications.html
