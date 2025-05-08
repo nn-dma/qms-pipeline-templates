@@ -28,8 +28,7 @@ stages:
             displayName: Run CFN-GUARD
       - job: Security_Check
         steps:
-          - displayName: 'Snyk Security Check'
-            uses: nn-dma/security_check@main
+          - uses: nn-dma/security_check@main
             with:
               SnykToken: ${{ secrets.SNYK_TOKEN }}
               Pipeline_Run: ${{ github.run_id}}
