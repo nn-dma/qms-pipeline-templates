@@ -8,24 +8,25 @@ parameters:
   - name: folder
     type: string
 
-stages:
-  - stage: ${{ parameters.stage_name }}
-    dependsOn: ${{ parameters.dependsOn }}
-    jobs:
-      - job: Check_against_compliance
+pipeline:
+  stages:
+    - stage: ${{ parameters.stage_name }}
+      dependsOn: ${{ parameters.dependsOn }}
+      jobs:
+        - job: Check_against_compliance
 
-        steps:
-          # TODO: Implement cfn guard, cfn-nag, static code analysis etc.
-          - checkout: none
+          steps:
+            # TODO: Implement cfn guard, cfn-nag, static code analysis etc.
+            - checkout: none
 
-          - script: |
-              echo "This step is currently not enabled."
-              #cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
-            displayName: Restore caches
-            workingDirectory: $(System.DefaultWorkingDirectory)
+            - script: |
+                echo "This step is currently not enabled."
+                #cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
+              displayName: Restore caches
+              workingDirectory: $(System.DefaultWorkingDirectory)
 
-          - script: |
-              pwd
-              ls
-            displayName:
-              Run CFN-GUARD
+            - script: |
+                pwd
+                ls
+              displayName:
+                Run CFN-GUARD
