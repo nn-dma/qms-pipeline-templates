@@ -32,3 +32,8 @@ stages:
             with:
               SnykToken: ${{ secrets.SNYK_TOKEN }}
               Pipeline_Run: ${{ github.run_id}}
+      
+  - template: nn-dma/security_check@main
+    parameters:
+     SnykToken: "empty"
+     Pipeline_Run: "empty"
