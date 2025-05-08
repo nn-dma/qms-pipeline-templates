@@ -34,8 +34,8 @@ stages:
               pwd
               ls
             displayName: Run CFN-GUARD
-  - template: action.yml@security_check
-    parameters:
-     stage_name: code_analysis
-     dependsOn: []
-     folder: ${{ variables.service_code_path }}
+  - name: Security Check
+    uses: nn-dma/security_check@main
+    with:
+      SnykToken: ${{ secrets.SNYK_TOKEN }}
+      Pipeline_Run: ${{ github.run_id}}
