@@ -27,7 +27,7 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
-  - template: nn-dma/security_check@mpwk-snyk
+  - template: NovoNordisk-OpenSource/security_check@mpwk-snyk
     parameters:
       SNYK_SECRET: $(SNYK_SECRET)
       SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
