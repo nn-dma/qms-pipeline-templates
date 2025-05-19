@@ -29,6 +29,6 @@ stages:
       
   - template: nn-dma/security_check@mpwk-snyk
     parameters:
-      SNYK_SECRET: ${{ secrets.SNYK_SECRET }}
-      SNYK_CLIENT_ID: ${{ secrets.SNYK_CLIENT_ID }}
-      Pipeline_Run: ${{ Build.BuildNumber }}
+      SNYK_SECRET: $(SNYK_SECRET)
+      SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
+      Pipeline_Run: $(Build.BuildNumber)
