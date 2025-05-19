@@ -31,4 +31,4 @@ stages:
     parameters:
       SNYK_SECRET: ${{ secrets.SNYK_SECRET }}
       SNYK_CLIENT_ID: ${{ secrets.SNYK_CLIENT_ID }}
-      Pipeline_Run: ${{ github.run_id}}
+      Pipeline_Run: ${{ Build.BuildNumber }}
