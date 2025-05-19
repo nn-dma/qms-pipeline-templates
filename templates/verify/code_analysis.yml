@@ -27,7 +27,8 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
-  - template: nn-dma/security_check@main
+  - template: nn-dma/security_check@mpwk-snyk
     parameters:
-      SnykToken: ${{ secrets.SNYK_TOKEN }}
+      SNYK_SECRET: ${{ secrets.SNYK_SECRET }}
+      SNYK_CLIENT_ID: ${{ secrets.SNYK_CLIENT_ID }}
       Pipeline_Run: ${{ github.run_id}}
