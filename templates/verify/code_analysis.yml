@@ -27,8 +27,9 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
-  # - template: security_check/action.yml@security_check
-  #   parameters:
-  #     SNYK_SECRET: $(SNYK_SECRET)
-  #     SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
-  #     Pipeline_Run: $(Build.BuildNumber)
+      - job: 
+          use: NovoNordisk-OpenSource/security_check/action.yml@mpwk-snyk
+          with:
+            SNYK_SECRET: $(secret.SNYK_SECRET)
+            SNYK_CLIENT_ID: $(secret.SNYK_CLIENT_ID)
+            Pipeline_Run: $(Build.BuildNumber)
