@@ -27,8 +27,9 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
-      - call-workflow-passing-data:
-          - uses: NovoNordisk-OpenSource.security_check.action@mpwk-snyk
+      - job: Security_Check
+        steps:
+          - uses: NovoNordisk-OpenSource/security_check@mpwk-snyk
             with:
               SNYK_SECRET: $(secret.SNYK_SECRET)
               SNYK_CLIENT_ID: $(secret.SNYK_CLIENT_ID)
