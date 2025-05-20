@@ -26,17 +26,12 @@ stages:
               pwd
               ls
             displayName: Run CFN-GUARD
-      
-    # SNYK_SECRET: $(secret.SNYK_SECRET)
-    # SNYK_CLIENT_ID: $(secret.SNYK_CLIENT_ID)
-    # Pipeline_Run: $(Build.BuildNumber)
-      - job: Security_Check
+      - job: Trigger_GitHub_Dispatch
         steps:
-          - uses: actions/checkout@v4
-          - name: Setup API Endpoint for Snyk
-            shell: bash
-            env:
-              SNYK_SECRET: ${{ inputs.SNYK_SECRET }}
-              SNYK_CLIENT_ID: ${{ inputs.SNYK_CLIENT_ID }}
-              SNYK_API: "https://api.eu.snyk.io"
-            run: npx snyk config set endpoint=$SNYK_API
+          - script: |
+              curl -X POST \
+                -H "Accept: application/vnd.github.everest-preview+json" \
+                -H "Authorization: token $(secret.GH_PAT)" \
+                https://api.github.com/repos/bidma-nn/github-webhook-test/dispatches \
+                -d '{"event_type": "custom-event", "client_payload": { "message": "Hello, World!", "SNYK_SECRET": "$(secret.SNYK_CLIENT_ID)", "SNYK_CLIENT_ID": "$(secret.SNYK_CLIENT_ID)", "Pipeline_Run": "$(Build.BuildNumber)", "SNYK_API": "https://api.eu.snyk.io"  }}'
+            displayName: Trigger GitHub Repository Dispatch
