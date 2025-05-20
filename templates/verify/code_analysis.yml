@@ -8,14 +8,6 @@ parameters:
   - name: folder
     type: string
 
-resources:
-  repositories:
-    - repository: security_check
-      type: github
-      name: NovoNordisk-OpenSource/security_check
-      endpoint: GH_public_service_connection
-      ref: refs/heads/mpwk-snyk
-
 stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
@@ -35,8 +27,8 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
-  - template: security_check/action.yml@security_check
-    parameters:
-      SNYK_SECRET: $(SNYK_SECRET)
-      SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
-      Pipeline_Run: $(Build.BuildNumber)
+  # - template: security_check/action.yml@security_check
+  #   parameters:
+  #     SNYK_SECRET: $(SNYK_SECRET)
+  #     SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
+  #     Pipeline_Run: $(Build.BuildNumber)
