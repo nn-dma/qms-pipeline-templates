@@ -7,7 +7,14 @@ git gc --force --quiet
 instScript=false
 instScript_files=()
 
-first_commit=$(git describe --match "*#released" --abbrev=0 --tags $(git rev-list --tags --max-count=1))
+first_commit=""
+for tag in $(git tag --sort=-creatordate); do
+  if [[ $tag == *#released* ]]; then
+    echo "first_commit: $tag"
+    first_commit=($tag)
+    break
+  fi
+done
 
 # If no release tags are found, then search for initial commit
 if [  -z $first_commit ]

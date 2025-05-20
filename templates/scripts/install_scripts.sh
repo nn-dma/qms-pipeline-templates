@@ -9,7 +9,14 @@ git gc --force --quiet
 instScript=false
 instScript_files=()
 
-sha_id=$(git rev-list -n 1 $(git describe --match "*#released" --abbrev=0 --tags $(git rev-list --tags --max-count=1)))
+sha_id=""
+for tag in $(git tag --sort=-creatordate); do
+  if [[ $tag == *#released* ]]; then
+    echo "Last released tag: $tag"
+    sha_id=$(git rev-list -n 1 $tag)
+    break
+  fi
+done
 
 for i in ${files[@]}; do
     code=$(
