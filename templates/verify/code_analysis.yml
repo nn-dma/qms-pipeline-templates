@@ -27,10 +27,16 @@ stages:
               ls
             displayName: Run CFN-GUARD
       
+    # SNYK_SECRET: $(secret.SNYK_SECRET)
+    # SNYK_CLIENT_ID: $(secret.SNYK_CLIENT_ID)
+    # Pipeline_Run: $(Build.BuildNumber)
       - job: Security_Check
         steps:
-          - uses: NovoNordisk-OpenSource/security_check@mpwk-snyk
-            with:
-              SNYK_SECRET: $(secret.SNYK_SECRET)
-              SNYK_CLIENT_ID: $(secret.SNYK_CLIENT_ID)
-              Pipeline_Run: $(Build.BuildNumber)
+          - uses: actions/checkout@v4
+          - name: Setup API Endpoint for Snyk
+            shell: bash
+            env:
+              SNYK_SECRET: ${{ inputs.SNYK_SECRET }}
+              SNYK_CLIENT_ID: ${{ inputs.SNYK_CLIENT_ID }}
+              SNYK_API: "https://api.eu.snyk.io"
+            run: npx snyk config set endpoint=$SNYK_API
