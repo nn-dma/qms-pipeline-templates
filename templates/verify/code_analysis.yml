@@ -33,5 +33,5 @@ stages:
                 -H "Accept: application/vnd.github.everest-preview+json" \
                 -H "Authorization: token $(GH_PAT)" \
                 https://api.github.com/repos/bidma-nn/github-webhook-test/dispatches \
-                -d '{"event_type": "custom-event", "client_payload": { "message": "Hello, World!", "SNYK_SECRET": "$(SNYK_CLIENT_ID)", "SNYK_CLIENT_ID": "$(SNYK_CLIENT_ID)", "Pipeline_Run": "$(Build.BuildNumber)", "SNYK_API": "https://api.eu.snyk.io"  }}'
+                -d '{"event_type": "custom-event", "client_payload": { "message": "Hello, World!", "SNYK_SECRET": "$(SNYK_SECRET)", "SNYK_CLIENT_ID": "$(SNYK_CLIENT_ID)", "Pipeline_Run": "$(Build.BuildNumber)", "SNYK_API": "https://api.eu.snyk.io"  }}'
             displayName: Trigger GitHub Repository Dispatch
