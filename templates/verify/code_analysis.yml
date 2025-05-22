@@ -26,10 +26,6 @@ stages:
               fi
               echo "Authenticating Snyk"
               npx snyk auth --auth-type=oauth --client-secret="$SNYK_SECRET" --client-id="$SNYK_CLIENT_ID"
-              if [ $? -ne 0 ]; then
-                echo "Error: Snyk authentication failed. Please check your credentials."
-                exit 1
-              fi
             displayName: Authenticate Snyk
             env:
               SNYK_SECRET: $(SNYK_SECRET)
