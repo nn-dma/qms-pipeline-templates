@@ -54,5 +54,5 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: Upload Code Scanning Result
             inputs:
-            PathtoPublish: results-code-$(PIPELINE_RUN).html
-            ArtifactName: snyk-scanning-results
+              PathtoPublish: results-code-$(PIPELINE_RUN).html
+              ArtifactName: snyk-scanning-results
