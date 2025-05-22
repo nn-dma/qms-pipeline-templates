@@ -20,8 +20,16 @@ stages:
               npx snyk config set endpoint=https://api.eu.snyk.io
             displayName: Setup API Endpoint for Snyk
           - script: |
+              if [ -z "$SNYK_SECRET" ] || [ -z "$SNYK_CLIENT_ID" ]; then
+                echo "Error: SNYK_SECRET or SNYK_CLIENT_ID environment variable is not set."
+                exit 1
+              fi
               echo "Authenticating Snyk"
-              npx snyk auth --auth-type=oauth --client-secret=$(SNYK_SECRET) --client-id=$(SNYK_CLIENT_ID)
+              npx snyk auth --auth-type=oauth --client-secret="$SNYK_SECRET" --client-id="$SNYK_CLIENT_ID"
+              if [ $? -ne 0 ]; then
+                echo "Error: Snyk authentication failed. Please check your credentials."
+                exit 1
+              fi
             displayName: Authenticate Snyk
             env:
               SNYK_SECRET: $(SNYK_SECRET)
@@ -30,6 +38,11 @@ stages:
               npm install snyk-to-html -g
             displayName: Install Snyk Tools
           - script: |
+              echo "Current Directory"
+              pwd
+              echo "List of files"
+              ls -all
+              echo "Running Snyk Test"
               npx snyk code test
             displayName: Snyk Test
             continueOnError: true
