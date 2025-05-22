@@ -8,6 +8,14 @@ parameters:
   - name: folder
     type: string
 
+resources:
+  repositories:
+    - repository: security_check
+      type: github
+      name: nn-dma/security_check
+      endpoint: GH_public_service_connection
+      ref: refs/heads/snyk-service-account-ado
+
 stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
@@ -26,33 +34,8 @@ stages:
               pwd
               ls
             displayName: Run CFN-GUARD
-      - job: Snyk_security_Test
-        steps:
-          - checkout: self
-          - script: |
-              echo "Setting up Snyk API endpoint"
-              npx snyk config set endpoint=https://api.eu.snyk.io
-            displayName: Setup API Endpoint for Snyk
-          - script: |
-              echo "Authenticating Snyk"
-              npx snyk auth --auth-type=oauth --client-secret=$(SNYK_SECRET) --client-id=$(SNYK_CLIENT_ID)
-            displayName: Authenticate Snyk
-            env:
-              SNYK_SECRET: $(SNYK_SECRET)
-              SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
-          - script: |
-              npm install snyk-to-html -g
-            displayName: Install Snyk Tools
-          - script: |
-              npx snyk code test
-            displayName: Snyk Test
-            continueOnError: true
-          - script: |
-              npx snyk code test --json | snyk-to-html -o results-code-$(PIPELINE_RUN).html
-            displayName: Snyk Report
-            continueOnError: true
-          - task: PublishBuildArtifacts@1
-            displayName: Upload Code Scanning Result
-            inputs:
-              PathtoPublish: results-code-$(PIPELINE_RUN).html
-              ArtifactName: snyk-scanning-results
+  - template: action_ado.yml@security_check
+    parameters:
+     stage_name: security_check
+     dependsOn: []
+     folder: ${{ variables.service_code_path }}
