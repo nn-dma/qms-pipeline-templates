@@ -8,19 +8,12 @@ parameters:
   - name: folder
     type: string
 
-# Description:
-
-# Purpose:
-
-# Expected output:
 stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - job: Check_against_compliance
-
         steps:
-          # TODO: Implement cfn guard, cfn-nag, static code analysis etc.
           - checkout: none
 
           - script: |
@@ -29,47 +22,38 @@ stages:
             displayName: Restore caches
             workingDirectory: $(System.DefaultWorkingDirectory)
 
-          # - script: |
-          #     assets=($(ls -d cdk.out/asset.*))
-          #     echo $assets
-          #     zip -r veracode.zip $assets
-          #   displayName: Setup environment
-
-          # - task: Veracode@3
-          #   inputs:
-          #     ConnectionDetailsSelection: 'Service Connection'
-          #     AnalysisService: 'Veracode'
-          #     veracodeAppProfile: '$(system.teamProject)'
-          #     version: '$(build.buildNumber)'
-          #     filepath: 'veracode.zip'
-          #     importResults: true
-          #     failBuildOnPolicyFail: true
-          #     failBuildIfUploadAndScanBuildStepFails: true
-          #     maximumWaitTime: '360'
-
-
-          # - script: |
-          #     zip -r veracode2.zip cdk.out
-          #   displayName: Setup environment
-
-          # - task: Veracode@3
-          #   inputs:
-          #     ConnectionDetailsSelection: 'Service Connection'
-          #     AnalysisService: 'Veracode'
-          #     veracodeAppProfile: '$(system.teamProject)'
-          #     version: '$(build.buildNumber)2'
-          #     filepath: 'veracode2.zip'
-          #     importResults: true
-          #     failBuildOnPolicyFail: true
-          #     failBuildIfUploadAndScanBuildStepFails: true
-          #     maximumWaitTime: '360'
           - script: |
               pwd
               ls
-            displayName:
-              Run CFN-GUARD
-              # cfn-guard validate --data cdk.out --rules /${INPUT_RULE_SET_NAME}.guard --show-summary fail -p
-
-          # - publish: $(System.DefaultWorkingDirectory)/cdk.out
-          #   artifact: cdk.out
-          #   displayName: publish cdk.out
+            displayName: Run CFN-GUARD
+      - job: Snyk_security_Test
+        steps:
+          - uses: actions/checkout@v4
+          - name: Setup API Endpoint for Snyk
+            shell: bash
+            env:
+              SNYK_API: "https://api.eu.snyk.io"
+            run: npx snyk config set endpoint=$SNYK_API
+          - name: Authenticate Snyk
+            shell: bash
+            env:
+              SNYK_SECRET: ${{ inputs.SNYK_SECRET }}
+              SNYK_CLIENT_ID: ${{ inputs.SNYK_CLIENT_ID }}
+            run: npx snyk auth --auth-type=oauth --client-secret=$SNYK_SECRET --client-id=$SNYK_CLIENT_ID
+          - name: Install Snyk Tools
+            shell: bash
+            run: npm install snyk-to-html -g
+          - uses: snyk/actions/setup@master
+          - name: Snyk Test
+            shell: bash
+            run: snyk code test
+            continue-on-error: true # To make sure that SARIF upload gets called
+          - name: Snyk Report
+            shell: bash
+            run: snyk code test --json | snyk-to-html -o results-code-${{ inputs.PIPELINE_RUN }}.html
+            continue-on-error: true # To make sure that SARIF upload gets called
+          - name: Upload Code Scanning Result
+            uses: actions/upload-artifact@v4
+            with:
+              name: snyk-scanning-results
+              path: results-code-${{ inputs.PIPELINE_RUN }}.html
