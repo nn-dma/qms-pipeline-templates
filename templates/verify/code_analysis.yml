@@ -28,32 +28,31 @@ stages:
             displayName: Run CFN-GUARD
       - job: Snyk_security_Test
         steps:
-          - uses: actions/checkout@v4
-          - name: Setup API Endpoint for Snyk
-            shell: bash
+          - checkout: self
+          - script: |
+              echo "Setting up Snyk API endpoint"
+              npx snyk config set endpoint=https://api.eu.snyk.io
+            displayName: Setup API Endpoint for Snyk
+          - script: |
+              echo "Authenticating Snyk"
+              npx snyk auth --auth-type=oauth --client-secret=$(SNYK_SECRET) --client-id=$(SNYK_CLIENT_ID)
+            displayName: Authenticate Snyk
             env:
-              SNYK_API: "https://api.eu.snyk.io"
-            run: npx snyk config set endpoint=$SNYK_API
-          - name: Authenticate Snyk
-            shell: bash
-            env:
-              SNYK_SECRET: ${{ inputs.SNYK_SECRET }}
-              SNYK_CLIENT_ID: ${{ inputs.SNYK_CLIENT_ID }}
-            run: npx snyk auth --auth-type=oauth --client-secret=$SNYK_SECRET --client-id=$SNYK_CLIENT_ID
-          - name: Install Snyk Tools
-            shell: bash
-            run: npm install snyk-to-html -g
-          - uses: snyk/actions/setup@master
-          - name: Snyk Test
-            shell: bash
-            run: snyk code test
-            continue-on-error: true # To make sure that SARIF upload gets called
-          - name: Snyk Report
-            shell: bash
-            run: snyk code test --json | snyk-to-html -o results-code-${{ inputs.PIPELINE_RUN }}.html
-            continue-on-error: true # To make sure that SARIF upload gets called
-          - name: Upload Code Scanning Result
-            uses: actions/upload-artifact@v4
-            with:
-              name: snyk-scanning-results
-              path: results-code-${{ inputs.PIPELINE_RUN }}.html
+              SNYK_SECRET: $(SNYK_SECRET)
+              SNYK_CLIENT_ID: $(SNYK_CLIENT_ID)
+          - script: |
+              npm install snyk-to-html -g
+            displayName: Install Snyk Tools
+          - script: |
+              npx snyk code test
+            displayName: Snyk Test
+            continueOnError: true
+          - script: |
+              npx snyk code test --json | snyk-to-html -o results-code-$(PIPELINE_RUN).html
+            displayName: Snyk Report
+            continueOnError: true
+          - task: PublishBuildArtifacts@1
+            displayName: Upload Code Scanning Result
+            inputs:
+            PathtoPublish: results-code-$(PIPELINE_RUN).html
+            ArtifactName: snyk-scanning-results
