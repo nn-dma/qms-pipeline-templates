@@ -39,7 +39,7 @@ stages:
               echo "List of files"
               ls -all
               echo "Running Snyk Test"
-              npx snyk code test .
+              npx snyk code test
             displayName: Snyk Test
             continueOnError: true
           - script: |
