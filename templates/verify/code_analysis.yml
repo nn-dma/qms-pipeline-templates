@@ -34,10 +34,6 @@ stages:
               npm install snyk-to-html -g
             displayName: Install Snyk Tools
           - script: |
-              echo "Current Directory"
-              pwd
-              echo "List of files"
-              ls -all
               echo "Running Snyk Test"
               npx snyk code test
             displayName: Snyk Test
