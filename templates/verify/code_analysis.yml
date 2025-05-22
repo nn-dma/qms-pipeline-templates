@@ -12,20 +12,6 @@ stages:
   - stage: ${{ parameters.stage_name }}
     dependsOn: ${{ parameters.dependsOn }}
     jobs:
-      - job: Check_against_compliance
-        steps:
-          - checkout: none
-
-          - script: |
-              echo "This step is currently not enabled."
-              #cp -r /mnt/cache/$(Build.Repository.Name)_cache/$(Build.BuildId)/cdk.out .
-            displayName: Restore caches
-            workingDirectory: $(System.DefaultWorkingDirectory)
-
-          - script: |
-              pwd
-              ls
-            displayName: Run CFN-GUARD
       - job: Snyk_security_Test
         steps:
           - checkout: self
@@ -48,11 +34,11 @@ stages:
             displayName: Snyk Test
             continueOnError: true
           - script: |
-              npx snyk code test --json | snyk-to-html -o results-code-$(PIPELINE_RUN).html
+              npx snyk code test --json | snyk-to-html -o results-code-$(Build.BuildNumber).html
             displayName: Snyk Report
             continueOnError: true
           - task: PublishBuildArtifacts@1
             displayName: Upload Code Scanning Result
             inputs:
-              PathtoPublish: results-code-$(PIPELINE_RUN).html
+              PathtoPublish: results-code-$(Build.BuildNumber).html
               ArtifactName: snyk-scanning-results
