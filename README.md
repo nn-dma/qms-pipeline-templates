@@ -35,6 +35,6 @@ git tag <your_version>
 git push origin <your_version>
 ```
 4. Point to new qms-pipelines templates in cli and bump the version as in this
-   [guide](https://github.com/nn-dma/qms-pipeline-templates?tab=readme-ov-file#point-to-latest-qms-pipeline-templates-tag-and-publish-a-new-qms-cli).
+   [guide](https://github.com/innersource-nn/qms-cli/blob/main/README.md).
 5. Thank the contributor(s) and inform them that their changes are availble at
    the latest tag.
